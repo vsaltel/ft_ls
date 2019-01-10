@@ -6,7 +6,7 @@
 #    By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/01/07 13:13:39 by vsaltel          ###   ########.fr        #
+#    Updated: 2019/01/10 14:34:44 by vsaltel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ CFLAGS = -g -fsanitize=address
 
 NAME 	=	ft_ls
 LIBFT	=	libft
-SRCDIR	=	src_ls
-INCDIR	=	include_ls
+SRCDIR	=	src
+INCDIR	=	include
 OBJDIR	=	objs
 FILES 	=	ft_ls.c				\
 			parser.c			\
