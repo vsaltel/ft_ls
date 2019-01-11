@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/10 14:35:03 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/11 17:13:23 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,17 @@ void	tmp(char *path)
 t_folder	*recursive_option(t_folder *pfolder, t_option option)
 {
 	struct stat pstat;
-	char buf[30];
+	char buf[100];
 	t_folder *new;
+	t_folder *tmp;
 	int i;
 
 	i = 0;
 	new = NULL;
+	tmp = pfolder;
 	while (pfolder->file[i].name != 0)
 	{
+		//printf("%s %d\n",pfolder->file[i].name, i);
 		if (stat(str_pathfile(buf, pfolder->path, pfolder->file[i].name), &pstat) == -1)
 		{
 			perror("stat");
@@ -56,17 +59,19 @@ t_folder	*recursive_option(t_folder *pfolder, t_option option)
 		}
 		else if (S_ISDIR(pstat.st_mode) && pfolder->file[i].name[0] != '.')
 		{
+			new = NULL;
 			if (!(new = malloc(sizeof(t_folder))))
 				exit(-1);
 			new->path = ft_strdup(buf);
-			new->next = pfolder->next;
-			pfolder->next = new;
-			pfolder = new;
+			//printf("%s\n", new->path);
+			new->next = tmp->next;
+			tmp->next = new;
+			tmp = new;
 			select_dir(new, option);
-			//tmp(buf);
 		}
 		i++;
 	}
+	//printf("exit %s\n", pfolder->path);
 	return (new);
 }
 

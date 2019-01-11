@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/10 14:35:14 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/11 17:16:28 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,18 @@ int		main(int argc, char **argv)
 	t_option	option;	
 	t_folder	*pfolder;
 	t_folder	*begin;
-	int			i;
 
 	pfolder = NULL;
 	begin = parse_options(pfolder, &option, argc, argv);
 	pfolder = begin;
-	i = 0;
+			select_dir(pfolder, option);
+	/*
 	while (pfolder)
 	{
 		select_dir(pfolder, option);
 		pfolder = pfolder->next;
 	}
+	*/
 	pfolder = begin;
 	pfolder = display(pfolder, option);
 	pfolder = test_option(pfolder, option);
