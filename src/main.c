@@ -6,14 +6,14 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/11 17:16:28 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/21 19:52:16 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_ls.h"
 
 /* --(a retirer avant de last push)-- */
-t_folder	*test_option(t_folder *pfolder, t_option option)
+static void	test_option(t_folder *pfolder, t_option option)
 {
 	t_folder	*begin;
 	int l = 0;
@@ -27,11 +27,11 @@ t_folder	*test_option(t_folder *pfolder, t_option option)
 		l++;
 	}
 	printf("l = %d, R = %d, a = %d, r = %d, t = %d", option.l, option.R, option.a, option.r, option.t);
-	return (begin);
+	pfolder = begin;
 }
 /* ---------------------------------- */
 
-t_folder	*display(t_folder *pfolder, t_option option)
+static void	display(t_folder *pfolder, t_option option)
 {
 	t_folder	*begin;
 	int j;
@@ -49,32 +49,22 @@ t_folder	*display(t_folder *pfolder, t_option option)
 			j++;
 		}
 		if (pfolder->next != NULL)
-			printf("\n");
+			ft_putchar('\n');
 		pfolder = pfolder->next;
 	}
-	return (begin);
+	pfolder = begin;
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_option	option;	
 	t_folder	*pfolder;
-	t_folder	*begin;
 
-	pfolder = NULL;
-	begin = parse_options(pfolder, &option, argc, argv);
-	pfolder = begin;
-			select_dir(pfolder, option);
-	/*
-	while (pfolder)
-	{
-		select_dir(pfolder, option);
-		pfolder = pfolder->next;
-	}
-	*/
-	pfolder = begin;
-	pfolder = display(pfolder, option);
-	pfolder = test_option(pfolder, option);
-	pfolder = closealldir(pfolder);
+	pfolder = parse_options(pfolder, &option, argc, argv);
+	fill_list(pfolder, option);	
+	display(pfolder, option);
+	test_option(pfolder, option);
+	//closealldir(pfolder);
+	free_folder(pfolder);
 	return (0);
 }

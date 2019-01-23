@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/11 17:14:25 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/21 19:52:15 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <sys/dir.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <uuid/uuid.h>
+#include <pwd.h>
 
 typedef struct				s_option
 {
@@ -27,6 +29,9 @@ typedef struct				s_option
 	int		a : 1;
 	int		r : 1;
 	int		t : 1;
+	int		U : 1;
+	int		G : 1;
+	int		O : 1;
 }							t_option;
 
 typedef struct				s_file
@@ -43,17 +48,20 @@ typedef struct				s_file
 typedef struct				s_folder
 {
 	char			*path;
-	DIR				*dirp;
 	int				nb_file;
 	t_file			*file;	
 	struct s_folder	*next;
 }							t_folder;
 
+void		pexit(char *str);
 t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **argv);
-void		select_dir(t_folder *pfolder, t_option option);
+void		fill_list(t_folder *pfolder, t_option option);
+t_folder	*select_dir(t_folder *pfolder, t_option option);
 char		*str_pathfile(char *dst, const char *s1, const char *s2);
+int			strl_pathfile(const char *s1, const char *s2);
 void		memset_file(t_file *pfile);
 void		memset_option(t_option *option);
-t_folder	*closealldir(t_folder *pfolder);
+//void		closealldir(t_folder *pfolder);
+void		free_folder(t_folder *pfolder);
 
 #endif
