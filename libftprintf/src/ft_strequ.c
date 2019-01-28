@@ -1,34 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   ft_strequ.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/23 15:13:04 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/28 09:23:21 by frossiny         ###   ########.fr       */
+/*   Created: 2018/11/07 17:08:18 by frossiny          #+#    #+#             */
+/*   Updated: 2018/11/07 17:27:33 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#include "libft.h"
 
-# include <dirent.h>
-# include <sys/stat.h>
-# include <pwd.h>
-# include <grp.h>
-# include <time.h>
-# include "ft_printf.h"
-
-typedef struct			s_file
+int		ft_strequ(char const *s1, char const *s2)
 {
-	char	*name;
-	char	mode[11];
-	char	*links;
-	char	*owner;
-	char	*group;
-	char	*bytes;
-	char	*date;
-}						t_file;
-
-#endif
+	if (!s1 || !s2)
+		return (0);
+	return (!ft_strcmp(s1, s2));
+}

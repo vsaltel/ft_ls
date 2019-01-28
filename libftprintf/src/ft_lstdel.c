@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   ft_lstdel.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/23 15:13:04 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/28 09:23:21 by frossiny         ###   ########.fr       */
+/*   Created: 2018/11/08 18:21:00 by frossiny          #+#    #+#             */
+/*   Updated: 2018/11/09 15:04:06 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#include "libft.h"
 
-# include <dirent.h>
-# include <sys/stat.h>
-# include <pwd.h>
-# include <grp.h>
-# include <time.h>
-# include "ft_printf.h"
-
-typedef struct			s_file
+void	ft_lstdel(t_list **alst, void (*del)(void *, size_t))
 {
-	char	*name;
-	char	mode[11];
-	char	*links;
-	char	*owner;
-	char	*group;
-	char	*bytes;
-	char	*date;
-}						t_file;
+	t_list	*cl;
+	t_list	*next;
 
-#endif
+	cl = *alst;
+	while (cl)
+	{
+		next = cl->next;
+		ft_lstdelone(&cl, del);
+		cl = next;
+	}
+	*alst = NULL;
+}

@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   ft_strrev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/23 15:13:04 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/28 09:23:21 by frossiny         ###   ########.fr       */
+/*   Created: 2018/11/08 15:56:25 by frossiny          #+#    #+#             */
+/*   Updated: 2018/11/08 16:11:03 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#include "libft.h"
 
-# include <dirent.h>
-# include <sys/stat.h>
-# include <pwd.h>
-# include <grp.h>
-# include <time.h>
-# include "ft_printf.h"
-
-typedef struct			s_file
+char	*ft_strrev(char *s)
 {
-	char	*name;
-	char	mode[11];
-	char	*links;
-	char	*owner;
-	char	*group;
-	char	*bytes;
-	char	*date;
-}						t_file;
+	int		i;
+	int		len;
+	char	tmp;
 
-#endif
+	if (!s)
+		return (NULL);
+	len = ft_strlen(s) - 1;
+	i = 0;
+	while (i < len)
+	{
+		tmp = s[len];
+		s[len--] = s[i];
+		s[i++] = tmp;
+	}
+	return (s);
+}

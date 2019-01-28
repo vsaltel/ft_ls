@@ -1,34 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/23 15:13:04 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/28 09:23:21 by frossiny         ###   ########.fr       */
+/*   Created: 2018/11/07 12:23:31 by frossiny          #+#    #+#             */
+/*   Updated: 2018/11/07 12:30:30 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#include "libft.h"
 
-# include <dirent.h>
-# include <sys/stat.h>
-# include <pwd.h>
-# include <grp.h>
-# include <time.h>
-# include "ft_printf.h"
-
-typedef struct			s_file
+int		ft_toupper(int c)
 {
-	char	*name;
-	char	mode[11];
-	char	*links;
-	char	*owner;
-	char	*group;
-	char	*bytes;
-	char	*date;
-}						t_file;
-
-#endif
+	if (ft_islower(c))
+		return (c - 32);
+	return (c);
+}

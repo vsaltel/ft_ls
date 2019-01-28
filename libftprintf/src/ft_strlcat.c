@@ -1,34 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/23 15:13:04 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/28 09:23:21 by frossiny         ###   ########.fr       */
+/*   Created: 2018/11/06 17:43:21 by frossiny          #+#    #+#             */
+/*   Updated: 2018/11/09 23:13:33 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#include "libft.h"
 
-# include <dirent.h>
-# include <sys/stat.h>
-# include <pwd.h>
-# include <grp.h>
-# include <time.h>
-# include "ft_printf.h"
-
-typedef struct			s_file
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
 {
-	char	*name;
-	char	mode[11];
-	char	*links;
-	char	*owner;
-	char	*group;
-	char	*bytes;
-	char	*date;
-}						t_file;
+	size_t	dst_len;
 
-#endif
+	if (size == 0)
+		return (ft_strlen(src));
+	dst_len = ft_strlen(dst);
+	if (dst_len >= size)
+		return (size + ft_strlen(src));
+	ft_strncat(dst, src, size - dst_len - 1);
+	return (dst_len + ft_strlen(src));
+}

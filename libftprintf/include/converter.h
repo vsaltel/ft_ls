@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   converter.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/23 15:13:04 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/28 09:23:21 by frossiny         ###   ########.fr       */
+/*   Created: 2018/12/07 16:31:09 by frossiny          #+#    #+#             */
+/*   Updated: 2019/01/21 15:48:00 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#ifndef CONVERTER_H
+# define CONVERTER_H
 
-# include <dirent.h>
-# include <sys/stat.h>
-# include <pwd.h>
-# include <grp.h>
-# include <time.h>
 # include "ft_printf.h"
 
-typedef struct			s_file
+typedef struct	s_converter
 {
-	char	*name;
-	char	mode[11];
-	char	*links;
-	char	*owner;
-	char	*group;
-	char	*bytes;
-	char	*date;
-}						t_file;
+	char		*dtype;
+	void		(*func)(t_arg *arg);
+}				t_conv;
+
+t_conv			g_convlst[] =
+{
+	{"di", &itoa_signed},
+	{"bouxX", &itoa_unsigned},
+	{"fF", &handle_float},
+	{"cC", &handle_char},
+	{"s", &handle_str},
+	{"p", &handle_ptr},
+	{"%", &handle_modulo},
+	{NULL, NULL}
+};
 
 #endif

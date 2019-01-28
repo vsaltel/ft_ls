@@ -6,7 +6,7 @@
 #    By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/16 11:23:33 by frossiny          #+#    #+#              #
-#    Updated: 2019/01/23 15:22:32 by frossiny         ###   ########.fr        #
+#    Updated: 2019/01/28 09:05:32 by frossiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC		=	gcc
 #CFLAGS = -g -fsanitize=address
 
 NAME 	=	ft_ls
-PRINTF	=	ft_printf
+PRINTF	=	libftprintf
 SRCDIR	=	srcs
 INCDIR	=	includes
 OBJDIR	=	objs

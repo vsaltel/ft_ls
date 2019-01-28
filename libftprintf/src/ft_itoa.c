@@ -1,34 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_ls.h                                            :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/01/23 15:13:04 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/28 09:23:21 by frossiny         ###   ########.fr       */
+/*   Created: 2018/11/08 15:46:38 by frossiny          #+#    #+#             */
+/*   Updated: 2018/11/08 16:35:54 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_LS
-# define FT_LS
+#include "libft.h"
 
-# include <dirent.h>
-# include <sys/stat.h>
-# include <pwd.h>
-# include <grp.h>
-# include <time.h>
-# include "ft_printf.h"
-
-typedef struct			s_file
+char	*ft_itoa(int n)
 {
-	char	*name;
-	char	mode[11];
-	char	*links;
-	char	*owner;
-	char	*group;
-	char	*bytes;
-	char	*date;
-}						t_file;
+	char	buf[13];
+	int		i;
+	int		sign;
+	long	nu;
 
-#endif
+	nu = n;
+	i = 0;
+	sign = 0;
+	if (nu < 0)
+	{
+		sign = 1;
+		nu *= -1;
+	}
+	while (nu > 9)
+	{
+		buf[i++] = '0' + nu % 10;
+		nu /= 10;
+	}
+	buf[i++] = '0' + nu % 10;
+	if (sign)
+		buf[i++] = '-';
+	buf[i] = '\0';
+	return (ft_strrev(ft_strdup(buf)));
+}
