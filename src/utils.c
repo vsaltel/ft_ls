@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/22 16:14:19 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/30 14:08:44 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,16 @@ void	memset_option(t_option *option)
 	option->a = 0;
 	option->r = 0;
 	option->t = 0;
-	option->U = 0;
-	option->G = 0;
-	option->O = 0;
 }
 
 void	memset_file(t_file *pfile)
 {
 	pfile->name = NULL;
 	pfile->mode = NULL;
-	pfile->nb_links = NULL;
+	pfile->nlink = 0;
 	pfile->owner = NULL;
 	pfile->group = NULL;
-	pfile->bytes = NULL;
+	pfile->bytes = 0;
 	pfile->date = NULL;
 }
 
@@ -76,25 +73,8 @@ int		strl_pathfile(const char *s1, const char *s2)
 	y++;
 	return (i + y);
 }
-/*
-void	closealldir(t_folder *pfolder)
-{
-	t_folder *begin;
 
-	begin = pfolder;
-	while (pfolder)
-	{
-		if (closedir(pfolder->dirp) != 0)
-		{
-			perror("closedir :");
-			exit(-1);
-		}
-		pfolder = pfolder->next;
-	}
-	pfolder = begin;
-}
-*/
-void	free_folder(t_folder *pfolder)
+void	free_folder(t_folder *pfolder, t_option option)
 {
 	t_folder *begin;
 	t_folder *tmp;
@@ -105,7 +85,15 @@ void	free_folder(t_folder *pfolder)
 	{
 		i = 0;
 		while (pfolder->file[i].name != 0)
-			free(pfolder->file[i++].name);
+		{
+			free(pfolder->file[i].name);
+			if (option.l)
+			{
+				free(pfolder->file[i].mode);
+				free(pfolder->file[i].date);
+			}
+			i++;
+		}
 		free(pfolder->file[i].name);
 		free(pfolder->file);
 		pfolder->file = NULL;

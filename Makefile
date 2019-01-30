@@ -6,7 +6,7 @@
 #    By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/01/21 18:40:15 by vsaltel          ###   ########.fr        #
+#    Updated: 2019/01/24 18:30:21 by vsaltel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ OBJDIR	=	objs
 FILES 	=	ft_ls.c				\
 			parser.c			\
 			utils.c				\
+			l_option.c			\
 			main.c
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS 	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

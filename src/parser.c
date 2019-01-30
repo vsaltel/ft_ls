@@ -6,20 +6,11 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/21 12:13:44 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/30 14:08:43 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_ls.h"
-
-void	set_rightaccess(t_option *option)
-{
-	/*
-	struct passwd *getpwuid(uid_t uid);
-	struct group *getgrgid(gid_t gid);
-	*/
-	//printf("name = %s\n", getpwuid(getuid())->pw_expire);
-}
 
 void	set_option(t_option *option, char *str)
 {
@@ -46,7 +37,6 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **ar
 {
 	t_folder *begin;
 
-	set_rightaccess(option);
 	memset_option(option);
 	argv++;
 	while (argc-- > 1)
