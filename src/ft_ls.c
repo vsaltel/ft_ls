@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/22 18:06:14 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/25 14:17:01 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,15 @@ t_folder		*select_dir(t_folder *pfolder, t_option option)
 		nb_file(pfolder);
 		if (!(pfolder->file = malloc(sizeof(t_file) * (pfolder->nb_file + 1))))
 			exit(-1);
-		pfolder->file[pfolder->nb_file].name = 0;
 		i = 0;
 		while ((dirc = readdir(dirp)) != NULL)
-			pfolder->file[i++].name = ft_strdup(dirc->d_name);
+		{
+			pfolder->file[i].name = ft_strdup(dirc->d_name);
+			if (option.l)
+				ell_option(pfolder, &pfolder->file[i]);
+			i++;
+		}
+		pfolder->file[i].name = 0;
 		if (closedir(dirp) != 0)
 			pexit(ft_strjoin("select_dir closedir ", pfolder->path));
 		if (option.R)

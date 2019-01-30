@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/21 19:52:16 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/30 14:08:42 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,12 @@ static void	display(t_folder *pfolder, t_option option)
 		while (pfolder->file[j].name != 0)
 		{
 			if ((pfolder->file[j].name[0] != '.' && !option.a) || option.a)
-				printf("%s\n", pfolder->file[j].name);
+			{
+				if (option.l)
+					printf("%s %2d %s  %s %6d %s %s\n", pfolder->file[j].mode, pfolder->file[j].nlink, pfolder->file[j].owner, pfolder->file[j].group, pfolder->file[j].bytes, pfolder->file[j].date ,pfolder->file[j].name);
+				else
+					printf("%s\n", pfolder->file[j].name);
+			}
 			j++;
 		}
 		if (pfolder->next != NULL)
@@ -63,8 +68,8 @@ int			main(int argc, char **argv)
 	pfolder = parse_options(pfolder, &option, argc, argv);
 	fill_list(pfolder, option);	
 	display(pfolder, option);
-	test_option(pfolder, option);
+	//test_option(pfolder, option);
 	//closealldir(pfolder);
-	free_folder(pfolder);
+	free_folder(pfolder, option);
 	return (0);
 }
