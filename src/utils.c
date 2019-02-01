@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/31 17:11:18 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/01 16:52:22 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,13 @@ void	memset_file(t_file *pfile)
 {
 	pfile->name = NULL;
 	pfile->mode = NULL;
+	pfile->extand_perm = ' ';
 	pfile->nlink = 0;
 	pfile->owner = NULL;
 	pfile->group = NULL;
 	pfile->bytes = 0;
 	pfile->date = NULL;
+	pfile->path_link = NULL;
 }
 
 char	*str_pathfile(char *dst, const char *s1, const char *s2)
