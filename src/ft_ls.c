@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 14:07:45 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/01 16:39:09 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin, t_option option)
 		i = 0;
 		while ((dirc = readdir(dirp)) != NULL)
 		{
+			memset_file(&pfolder->file[i]);
 			pfolder->file[i++].name = ft_strdup(dirc->d_name);
 			if (option.l)
 				ell_option(pfolder, &pfolder->file[i - 1]);

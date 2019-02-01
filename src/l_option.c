@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 14:09:59 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/01 17:03:30 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,20 @@ void	fill_mode(t_file *pfile, struct stat pstat)
 {
 	if (!(pfile->mode = malloc(sizeof(char) * 12)))
 		exit(-1);
-	(S_ISDIR(pstat.st_mode)) ? (pfile->mode[0] = 'd') : (pfile->mode[0] = '-');
-	//TODO other file type
+	if (S_ISBLK(pstat.st_mode))
+		(pfile->mode[0] = 'b');
+	else if (S_ISCHR(pstat.st_mode))
+		(pfile->mode[0] = 'c');
+	else if (S_ISDIR(pstat.st_mode))
+		(pfile->mode[0] = 'd');
+	else if (S_ISLNK(pstat.st_mode))
+		(pfile->mode[0] = 'l');
+	else if (S_ISSOCK(pstat.st_mode))
+		(pfile->mode[0] = 's');
+	else if (S_ISFIFO(pstat.st_mode))
+		(pfile->mode[0] = 'p');
+	else
+		(pfile->mode[0] = '-');
 	((pstat.st_mode & (S_IRUSR)) != 0) ? (pfile->mode[1] = 'r') : (pfile->mode[1] = '-');
 	((pstat.st_mode & (S_IWUSR)) != 0) ? (pfile->mode[2] = 'w') : (pfile->mode[2] = '-');
 	((pstat.st_mode & (S_IXUSR)) != 0) ? (pfile->mode[3] = 'x') : (pfile->mode[3] = '-');
@@ -55,6 +67,15 @@ void	ell_option(t_folder *pfolder, t_file *pfile)
 	{
 		fill_mode(pfile, pstat);	
 		fill_other(pfile, pstat);
+		if (listxattr(buf, NULL, 0, XATTR_NOFOLLOW))
+			pfile->extand_perm = '@';
+		if (pfile->mode[0] == 'l')
+		{
+			if (!(pfile->path_link = malloc(sizeof(char) * BUFF_SIZE)))
+				exit(-1);
+			ft_memset(pfile->path_link, '\0', BUFF_SIZE);
+			readlink(buf, pfile->path_link, BUFF_SIZE - 1);
+		}
 	}
 	free(buf);
 }	

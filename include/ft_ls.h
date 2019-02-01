@@ -6,18 +6,21 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/31 18:29:05 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/01 17:03:49 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
+#define BUFF_SIZE 64
+
 #include "../libft/includes/libft.h"
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/dir.h>
 #include <sys/stat.h>
+#include <sys/xattr.h>
 #include <dirent.h>
 #include <uuid/uuid.h>
 #include <pwd.h>
@@ -37,11 +40,13 @@ typedef struct				s_file
 {
 	char	*name;
 	char	*mode;
+	char	extand_perm;	
 	int		nlink;
 	char	*owner;
 	char	*group;
 	int		bytes;
 	char	*date;
+	char	*path_link;
 }							t_file;
 
 typedef struct				s_folder
