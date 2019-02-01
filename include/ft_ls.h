@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/30 13:37:32 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/31 18:29:05 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ typedef struct				s_folder
 void		pexit(char *str);
 t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **argv);
 void		fill_list(t_folder *pfolder, t_option option);
-t_folder	*select_dir(t_folder *pfolder, t_option option);
+void		test_folder(char **argv, int argc);
+void		sort_ascii(t_folder *pfolder);
+void		display(t_folder *pfolder, t_option option);
+t_folder	*select_dir(t_folder *pfolder, const t_folder *begin, t_option option);
 char		*str_pathfile(char *dst, const char *s1, const char *s2);
 int			strl_pathfile(const char *s1, const char *s2);
 void		memset_file(t_file *pfile);

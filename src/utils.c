@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/30 14:08:44 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/01/31 17:11:18 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,19 +84,22 @@ void	free_folder(t_folder *pfolder, t_option option)
 	while (pfolder)
 	{
 		i = 0;
-		while (pfolder->file[i].name != 0)
+		if (pfolder->file)
 		{
-			free(pfolder->file[i].name);
-			if (option.l)
+			while (pfolder->file[i].name != 0)
 			{
-				free(pfolder->file[i].mode);
-				free(pfolder->file[i].date);
+				free(pfolder->file[i].name);
+				if (option.l)
+				{
+					free(pfolder->file[i].mode);
+					free(pfolder->file[i].date);
+				}
+				i++;
 			}
-			i++;
+			free(pfolder->file[i].name);
+			free(pfolder->file);
+			pfolder->file = NULL;
 		}
-		free(pfolder->file[i].name);
-		free(pfolder->file);
-		pfolder->file = NULL;
 		free(pfolder->path);
 		tmp = pfolder;
 		pfolder = pfolder->next;
