@@ -6,7 +6,7 @@
 #    By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/01/24 18:30:21 by vsaltel          ###   ########.fr        #
+#    Updated: 2019/01/31 16:23:25 by vsaltel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,9 @@ INCDIR	=	include
 OBJDIR	=	objs
 FILES 	=	ft_ls.c				\
 			parser.c			\
+			display.c			\
 			utils.c				\
+			utils2.c			\
 			l_option.c			\
 			main.c
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))

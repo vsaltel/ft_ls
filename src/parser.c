@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/01/30 14:08:43 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/01 14:10:17 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **ar
 		if (!(pfolder = malloc(sizeof(t_folder))))
 			exit(-1);
 		pfolder->next = NULL;
+		pfolder->file = NULL;
 		pfolder->path = ft_strdup(*argv++);
 		begin = pfolder;
 		while (--argc > 0)
@@ -60,6 +61,7 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **ar
 			pfolder = pfolder->next;
 			pfolder->path = ft_strdup(*argv++);
 			pfolder->next = NULL;
+			pfolder->file = NULL;
 		}
 	}
 	else
@@ -71,6 +73,7 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **ar
 		begin = pfolder;
 		pfolder->path[0] = '.';
 		pfolder->path[1] = '\0';
+		pfolder->file = NULL;
 		pfolder->next = NULL;
 	}
 	return (begin);
