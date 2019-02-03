@@ -51,7 +51,7 @@ static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_op
 			exit(-1);
 		if (lstat(str_pathfile(buf, pfolder->path, pfolder->file[i].name), &pstat) == -1)
 			perror(buf);
-		else if (S_ISDIR(pstat.st_mode) && ((pstat.st_mode & (S_IXOTH | S_IROTH)) != 0) && pfolder->file[i].name[0] != '.')
+		else if (S_ISDIR(pstat.st_mode) && ((pstat.st_mode & (S_IXOTH | S_IROTH)) != 0) && (pfolder->file[i].name[0] != '.' && !option.R))
 		{
 			new = NULL;
 			if (!(new = malloc(sizeof(t_folder))))

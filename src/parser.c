@@ -12,6 +12,11 @@
 
 #include "../include/ft_ls.h"
 
+int		exists(char	*file)
+{
+
+}
+
 void	set_option(t_option *option, char *str)
 {
 	int i;
