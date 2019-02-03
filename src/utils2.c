@@ -70,3 +70,19 @@ void	test_folder(char **argv, int argc)
 		i++;
 	}
 }
+
+int		can_open_folder(char *folder)
+{
+	size_t	len;
+
+	if (!folder)
+		return (0);
+	len = ft_strlen(folder);
+	if (len == 0)
+		return (0);
+	else if (folder[0] == '.' && len == 1)
+		return (0);
+	else if (folder[0] == '.' && folder[1] == '.' && len == 2)
+		return (0);
+	return (1);
+}

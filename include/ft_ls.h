@@ -70,5 +70,6 @@ void		memset_file(t_file *pfile);
 void		memset_option(t_option *option);
 void		free_folder(t_folder *pfolder, t_option option);
 void		ell_option(t_folder *pfolder, t_file *pfile);
+int			can_open_folder(char *folder);
 
 #endif
