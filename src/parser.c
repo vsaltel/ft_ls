@@ -14,7 +14,7 @@
 
 int		exists(char	*file)
 {
-
+	return (0);
 }
 
 void	set_option(t_option *option, char *str)
