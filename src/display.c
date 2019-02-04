@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/30 15:51:29 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 17:02:26 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 17:18:56 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,20 @@ void	display(t_folder *pfolder, t_option option)
 	int j;
 
 	j = 0;
+	if (option.l)
+		printf("total %lld\n", pfolder->total_blocks);
 	while (pfolder->file[j].name != 0)
 	{
 		if ((pfolder->file[j].name[0] != '.' && !option.a) || option.a)
 		{
 			if (option.l)
 			{
-				if (pfolder->file[j].path_link)
-					printf("%s%c %2d %s  %s %6d %s %s -> %s\n", pfolder->file[j].mode, pfolder->file[j].extand_perm, pfolder->file[j].nlink, pfolder->file[j].owner, pfolder->file[j].group, pfolder->file[j].bytes, pfolder->file[j].date ,pfolder->file[j].name, pfolder->file[j].path_link);
+				if (pfolder->file[j].mode[0] == 'l')
+					printf("%s%-1c %2d %s  %s %6d %s %s -> %s\n", pfolder->file[j].mode, pfolder->file[j].extand_perm, pfolder->file[j].nlink, pfolder->file[j].owner, pfolder->file[j].group, pfolder->file[j].bytes, pfolder->file[j].date ,pfolder->file[j].name, pfolder->file[j].path_link);
+				else if (pfolder->file[j].mode[0] == 'c')
+					printf("%s%-1c %2d %s  %s %4d, %4d %s %s\n", pfolder->file[j].mode, pfolder->file[j].extand_perm, pfolder->file[j].nlink, pfolder->file[j].owner, pfolder->file[j].group, pfolder->file[j].major, pfolder->file[j].minor, pfolder->file[j].date ,pfolder->file[j].name);
 				else
-					printf("%s%c %2d %s  %s %6d %s %s\n", pfolder->file[j].mode, pfolder->file[j].extand_perm, pfolder->file[j].nlink, pfolder->file[j].owner, pfolder->file[j].group, pfolder->file[j].bytes, pfolder->file[j].date ,pfolder->file[j].name);
+					printf("%s%-1c %2d %s  %s %6d %s %s\n", pfolder->file[j].mode, pfolder->file[j].extand_perm, pfolder->file[j].nlink, pfolder->file[j].owner, pfolder->file[j].group, pfolder->file[j].bytes, pfolder->file[j].date ,pfolder->file[j].name);
 			}
 			else
 				printf("%s\n", pfolder->file[j].name);

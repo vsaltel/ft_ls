@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 16:39:09 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 17:18:54 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,10 @@ static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_op
 		else if (S_ISDIR(pstat.st_mode) && ((pstat.st_mode & (S_IXOTH | S_IROTH)) != 0) && pfolder->file[i].name[0] != '.')
 		{
 			new = NULL;
-			if (!(new = malloc(sizeof(t_folder))))
-				exit(-1);
+			new = malloc_pfolder(buf);
 			if (tmp == pfolder)
 				rtr = new;
-			new->path = buf;
+			free(buf);
 			buf = NULL;
 			new->next = tmp->next;
 			tmp->next = new;
@@ -94,7 +93,7 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin, t_option option)
 			memset_file(&pfolder->file[i]);
 			pfolder->file[i++].name = ft_strdup(dirc->d_name);
 			if (option.l)
-				ell_option(pfolder, &pfolder->file[i - 1]);
+				ell_option(pfolder, &pfolder->file[i - 1], option);
 		}
 		pfolder->file[i].name = 0;
 		sort_ascii(pfolder);
