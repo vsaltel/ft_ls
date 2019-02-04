@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 13:29:13 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/04 17:21:11 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,8 @@ void	fill_other(t_file *pfile, struct stat pstat)
 	pfile->nlink = pstat.st_nlink;
 	pfile->owner = getpwuid(pstat.st_uid)->pw_name;
 	pfile->group = getgrgid(pstat.st_gid)->gr_name;
-	//TODO espacement
+	pfile->major = major(pstat.st_rdev);
+	pfile->minor = minor(pstat.st_rdev);
 	pfile->bytes = pstat.st_size;
 	pfile->date = ft_strdup(&ctime(&pstat.st_mtimespec.tv_sec)[4]);
 	pfile->date[12] = '\0';
@@ -25,7 +26,7 @@ void	fill_other(t_file *pfile, struct stat pstat)
 
 void	fill_mode(t_file *pfile, struct stat pstat)
 {
-	if (!(pfile->mode = malloc(sizeof(char) * 12)))
+	if (!(pfile->mode = malloc(sizeof(char) * 11)))
 		exit(-1);
 	if (S_ISBLK(pstat.st_mode))
 		(pfile->mode[0] = 'b');
@@ -50,11 +51,10 @@ void	fill_mode(t_file *pfile, struct stat pstat)
 	((pstat.st_mode & (S_IROTH)) != 0) ? (pfile->mode[7] = 'r') : (pfile->mode[7] = '-');
 	((pstat.st_mode & (S_IWOTH)) != 0) ? (pfile->mode[8] = 'w') : (pfile->mode[8] = '-');
 	((pstat.st_mode & (S_IXOTH)) != 0) ? (pfile->mode[9] = 'x') : (pfile->mode[9] = '-');
-	//pfile->mode[10] = ' '; //TODO @ + (et espacement)
 	pfile->mode[10] = '\0';
 }
 
-void	ell_option(t_folder *pfolder, t_file *pfile)
+void	ell_option(t_folder *pfolder, t_file *pfile, t_option option)
 {
 	struct stat pstat;
 	char		*buf;
@@ -67,6 +67,8 @@ void	ell_option(t_folder *pfolder, t_file *pfile)
 	{
 		fill_mode(pfile, pstat);	
 		fill_other(pfile, pstat);
+		if (pfile->name[0] != '.' || option.a)
+			pfolder->total_blocks += pstat.st_blocks;
 		if (listxattr(buf, NULL, 0, XATTR_NOFOLLOW))
 			pfile->extand_perm = '@';
 		if (pfile->mode[0] == 'l')
