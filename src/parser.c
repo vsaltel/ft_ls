@@ -3,18 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 14:10:17 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 14:13:27 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
 int		exists(char	*file)
 {
-	return (0);
+	DIR *folder;
+
+	if (!file || !(folder = opendir(file)))
+		return (0);
+	return (!closedir(folder));
 }
 
 void	set_option(t_option *option, char *str)
@@ -34,6 +38,10 @@ void	set_option(t_option *option, char *str)
 			option->r = 1;
 		if (str[i] == 't')
 			option->t = 1;
+		if (str[i] == 'f')
+			option->f = 1;
+		if (str[i] == 'f')
+			option->a = 1;
 		i++;
 	}
 }
@@ -51,8 +59,16 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **ar
 		set_option(option, *argv);
 		argv++;
 	}
+	option->argc = argc;
 	if (argc > 0)
 	{
+		while (argc && !exists(*argv))
+		{
+			perror(*argv++);
+			argc--;
+		}
+		if (argc == 0)
+			exit(-1);
 		if (!(pfolder = malloc(sizeof(t_folder))))
 			exit(-1);
 		pfolder->next = NULL;
@@ -61,6 +77,11 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **ar
 		begin = pfolder;
 		while (--argc > 0)
 		{
+			if (!exists(*argv))
+			{
+				perror(*argv++);
+				continue ;
+			}
 			if (!(pfolder->next = malloc(sizeof(t_folder))))
 				exit(-1);
 			pfolder = pfolder->next;

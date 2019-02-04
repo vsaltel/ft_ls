@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 14:36:39 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 14:41:26 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
 /* --(a retirer avant de last push)-- */
 static void	test_option(t_folder *pfolder, t_option option)
@@ -33,12 +33,15 @@ static void	test_option(t_folder *pfolder, t_option option)
 
 int			main(int argc, char **argv)
 {
-	t_option	option;	
+	t_option	option;
 	t_folder	*pfolder;
 
 	//test_folder(argv, argc);
 	pfolder = parse_options(pfolder, &option, argc, argv);
-	fill_list(pfolder, option);	
+	//Sort args
+	if (!option.f)
+		merge_sort(&pfolder, option);
+	fill_list(pfolder, option);
 	//test_option(pfolder, option);
 	free_folder(pfolder, option);
 	return (0);

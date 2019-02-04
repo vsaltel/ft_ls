@@ -6,18 +6,31 @@
 #    By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/07/16 11:23:33 by frossiny          #+#    #+#              #
-#    Updated: 2018/12/06 16:40:41 by frossiny         ###   ########.fr        #
+#    Updated: 2019/02/04 14:20:51 by frossiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		=	gcc
 CFLAGS	+=	-Wall -Werror -Wextra
 
-NAME 	=	libft.a
-DIR		=	srcs
-INCDIR	=	includes
+NAME 	=	libftprintf.a
+SRCDIR	=	src
+INCDIR	=	include
 OBJDIR	=	objs
-FILES 	=	ft_memset.c		\
+FILES 	=	ft_printf.c					\
+			arg_parser.c				\
+			arg_filler.c				\
+			converter.c					\
+			utils.c						\
+			utils2.c					\
+			converters/char.c			\
+			converters/ftoa.c			\
+			converters/integer.c		\
+			converters/pointer.c		\
+			converters/itoa_signed.c	\
+			converters/itoa_unsigned.c	\
+			converters/unknown.c		\
+			ft_memset.c		\
 			ft_memalloc.c	\
 			ft_memdel.c		\
 			ft_memcpy.c		\
@@ -86,9 +99,10 @@ FILES 	=	ft_memset.c		\
 			ft_lstdelstr.c	\
 			ft_lstiter.c	\
 			ft_lstmap.c		\
-			ft_lstfold.c
-SRCS	=	$(addprefix $(DIR)/, $(FILES))
-OBJS 	=	$(SRCS:$(DIR)/%.c=$(OBJDIR)/%.o)
+			ft_lstfold.c	\
+			ft_lstlen.c
+SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
+OBJS 	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 ##### Colors #####
 _END=\x1b[0m
@@ -104,25 +118,27 @@ _PURPLE=\x1b[35m
 _CYAN=\x1b[36m
 _WHITE=\x1b[37m
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re $(LIBFT)
 
 $(NAME): $(OBJS)
-	@echo "${_BLUE}${_BOLD}Linking $(NAME)${_END}"
-	@$(AR) rc $(NAME) $(OBJS)
+	@echo "${_BLUE}${_BOLD}[Linking] $(NAME)${_END}"
+	@ar rc $(NAME) $(OBJS)
 	@echo "${_GREEN}${_BOLD}$(NAME) done.${_END}"
 
-$(OBJDIR)/%.o: $(DIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
+	@[ -d $(OBJDIR)/converters ] || mkdir -p $(OBJDIR)/converters
 	@echo "${_PURPLE}Compiling $<${_END}"
-	@$(CC) $(CFLAGS) -I $(INCDIR) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I $(INCDIR) -I $(LIBFT)/includes -o $@ -c $<
 
 all: $(NAME)
 
 clean:
-	@echo "${_RED}${_BOLD}Cleaning obj files...${_END}"
+	@echo "${_RED}${_BOLD}Removing obj files...${_END}"
 	@rm -f $(OBJS)
 
 fclean: clean
-	@echo "${_RED}${_BOLD}Cleaning project...${_END}"
+	@echo "${_RED}${_BOLD}Removing $(NAME)...${_END}"
 	@rm -f $(NAME)
 
 re: fclean $(NAME)

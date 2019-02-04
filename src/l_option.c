@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   l_option.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 17:03:30 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 13:29:13 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
 void	fill_other(t_file *pfile, struct stat pstat)
 {

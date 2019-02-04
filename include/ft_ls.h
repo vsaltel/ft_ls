@@ -3,19 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ls.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 17:03:49 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 14:40:43 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_LS_H
 # define FT_LS_H
 
-#define BUFF_SIZE 64
-
-#include "../libft/includes/libft.h"
+#include "ft_printf.h"
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/dir.h>
@@ -29,18 +27,20 @@
 
 typedef struct				s_option
 {
+	int		argc;
 	int		l : 1;
 	int		R : 1;
 	int		a : 1;
 	int		r : 1;
 	int		t : 1;
+	int		f : 1;
 }							t_option;
 
 typedef struct				s_file
 {
 	char	*name;
 	char	*mode;
-	char	extand_perm;	
+	char	extand_perm;
 	int		nlink;
 	char	*owner;
 	char	*group;
@@ -53,7 +53,7 @@ typedef struct				s_folder
 {
 	char			*path;
 	int				nb_file;
-	t_file			*file;	
+	t_file			*file;
 	struct s_folder	*next;
 }							t_folder;
 
@@ -71,5 +71,7 @@ void		memset_option(t_option *option);
 void		free_folder(t_folder *pfolder, t_option option);
 void		ell_option(t_folder *pfolder, t_file *pfile);
 int			can_open_folder(char *folder);
+void		merge_sort(t_folder **list, t_option option);
+
 
 #endif

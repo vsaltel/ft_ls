@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 16:39:09 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 13:44:07 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
 static int		nb_file(t_folder *pfolder)
 {
@@ -51,7 +51,7 @@ static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_op
 			exit(-1);
 		if (lstat(str_pathfile(buf, pfolder->path, pfolder->file[i].name), &pstat) == -1)
 			perror(buf);
-		else if (S_ISDIR(pstat.st_mode) && ((pstat.st_mode & (S_IXOTH | S_IROTH)) != 0) && (pfolder->file[i].name[0] != '.' || (option.R && can_open_folder(pfolder->file[i].name))))
+		else if (S_ISDIR(pstat.st_mode) && ((pstat.st_mode & (S_IXOTH | S_IROTH)) != 0) && (pfolder->file[i].name[0] != '.' || (option.a && can_open_folder(pfolder->file[i].name))))
 		{
 			new = NULL;
 			if (!(new = malloc(sizeof(t_folder))))
@@ -84,7 +84,7 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin, t_option option)
 	if ((dirp = opendir(pfolder->path)) != NULL)
 	{
 		if (pfolder != begin)
-			printf("\n%s:\n", pfolder->path);
+			ft_printf("\n%s:\n", pfolder->path);
 		nb_file(pfolder);
 		if (!(pfolder->file = malloc(sizeof(t_file) * (pfolder->nb_file + 1))))
 			exit(-1);
@@ -118,8 +118,9 @@ void			fill_list(t_folder *pfolder, t_option option)
 	while (pfolder)
 	{
 		tmp = pfolder->next;
-		if (pfolder->next != NULL && pfolder == begin)
-			printf("%s:\n", pfolder->path);
+
+		if ((pfolder->next != NULL && pfolder == begin) || option.argc > 1)
+			ft_printf("%s:\n", pfolder->path);
 		select_dir(pfolder, begin, option);
 		while (pfolder->next && option.R)
 			pfolder = pfolder->next;

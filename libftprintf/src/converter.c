@@ -1,40 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstfold.c                                       :+:      :+:    :+:   */
+/*   converter.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 14:11:03 by frossiny          #+#    #+#             */
-/*   Updated: 2018/11/16 11:27:45 by frossiny         ###   ########.fr       */
+/*   Created: 2018/12/07 14:33:18 by frossiny          #+#    #+#             */
+/*   Updated: 2019/02/01 17:18:26 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
+#include "ft_printf.h"
+#include "converter.h"
 
-void	ft_lstfold(t_list **lst, void (*del)(void *, size_t))
+void	convert(t_arg *arg)
 {
-	t_list	*prev;
-	t_list	*current;
-	t_list	*next;
+	int		i;
 
-	if (!lst || !*lst)
-		return ;
-	prev = NULL;
-	current = *lst;
-	while (current)
+	i = 0;
+	if (!is_type(arg->type))
+		return (handle_unknown(arg));
+	while (g_convlst[i].dtype)
 	{
-		next = current->next;
-		if (!current->content)
+		if (ft_strchr(g_convlst[i].dtype, arg->type))
 		{
-			ft_lstdelone(&current, del);
-			if (prev)
-				prev->next = next;
-			else
-				*lst = next;
+			g_convlst[i].func(arg);
+			return ;
 		}
-		prev = current;
-		current = next;
+		i++;
 	}
 }

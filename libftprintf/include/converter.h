@@ -1,22 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   converter.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/05 18:22:55 by frossiny          #+#    #+#             */
-/*   Updated: 2018/11/14 13:50:14 by frossiny         ###   ########.fr       */
+/*   Created: 2018/12/07 16:31:09 by frossiny          #+#    #+#             */
+/*   Updated: 2019/01/21 15:48:00 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef CONVERTER_H
+# define CONVERTER_H
 
-void	*ft_memset(void *b, int c, size_t len)
+# include "ft_printf.h"
+
+typedef struct	s_converter
 {
-	if (len == 0)
-		return (b);
-	*(unsigned char *)b = (unsigned char)c;
-	ft_memset(b + 1, c, len - 1);
-	return (b);
-}
+	char		*dtype;
+	void		(*func)(t_arg *arg);
+}				t_conv;
+
+t_conv			g_convlst[] =
+{
+	{"di", &itoa_signed},
+	{"bouxX", &itoa_unsigned},
+	{"fF", &handle_float},
+	{"cC", &handle_char},
+	{"s", &handle_str},
+	{"p", &handle_ptr},
+	{"%", &handle_modulo},
+	{NULL, NULL}
+};
+
+#endif

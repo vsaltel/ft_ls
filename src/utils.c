@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 16:52:22 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/04 14:12:59 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
 void	pexit(char *str)
 {
@@ -25,6 +25,7 @@ void	memset_option(t_option *option)
 	option->a = 0;
 	option->r = 0;
 	option->t = 0;
+	option->f = 0;
 }
 
 void	memset_file(t_file *pfile)
