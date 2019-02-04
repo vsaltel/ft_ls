@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 17:25:18 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/04 18:01:39 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void			fill_list(t_folder *pfolder, t_option option)
 	{
 		tmp = pfolder->next;
 
-		if ((pfolder->next != NULL && pfolder == begin) || option.argc > 1)
+		if ((pfolder->next != NULL && pfolder == begin) && option.argc > 1)
 			ft_printf("%s:\n", pfolder->path);
 		select_dir(pfolder, begin, option);
 		while (pfolder->next && option.R)
