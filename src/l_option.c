@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 17:21:11 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/05 14:04:51 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	fill_mode(t_file *pfile, struct stat pstat)
 {
 	if (!(pfile->mode = malloc(sizeof(char) * 11)))
 		exit(-1);
+	pfile->mode[0] = '-';
 	if (S_ISBLK(pstat.st_mode))
 		(pfile->mode[0] = 'b');
 	else if (S_ISCHR(pstat.st_mode))
@@ -40,8 +41,6 @@ void	fill_mode(t_file *pfile, struct stat pstat)
 		(pfile->mode[0] = 's');
 	else if (S_ISFIFO(pstat.st_mode))
 		(pfile->mode[0] = 'p');
-	else
-		(pfile->mode[0] = '-');
 	((pstat.st_mode & (S_IRUSR)) != 0) ? (pfile->mode[1] = 'r') : (pfile->mode[1] = '-');
 	((pstat.st_mode & (S_IWUSR)) != 0) ? (pfile->mode[2] = 'w') : (pfile->mode[2] = '-');
 	((pstat.st_mode & (S_IXUSR)) != 0) ? (pfile->mode[3] = 'x') : (pfile->mode[3] = '-');
@@ -65,7 +64,7 @@ void	ell_option(t_folder *pfolder, t_file *pfile, t_option option)
 		perror(buf);
 	else
 	{
-		fill_mode(pfile, pstat);	
+		fill_mode(pfile, pstat);
 		fill_other(pfile, pstat);
 		if (pfile->name[0] != '.' || option.a)
 			pfolder->total_blocks += pstat.st_blocks;
@@ -80,4 +79,5 @@ void	ell_option(t_folder *pfolder, t_file *pfile, t_option option)
 		}
 	}
 	free(buf);
-}	
+}
+

@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 14:12:59 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/05 14:32:38 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 void	pexit(char *str)
 {
-		perror(str);
-		exit(-1);
+	perror(str);
+	exit(-1);
 }
 
 void	memset_option(t_option *option)
 {
 	option->l = 0;
-	option->R = 0;
+	option->rec = 0;
 	option->a = 0;
 	option->r = 0;
 	option->t = 0;
@@ -79,9 +79,9 @@ int		strl_pathfile(const char *s1, const char *s2)
 
 void	free_folder(t_folder *pfolder, t_option option)
 {
-	t_folder *begin;
-	t_folder *tmp;
-	int i;
+	t_folder	*begin;
+	t_folder	*tmp;
+	int			i;
 
 	begin = pfolder;
 	while (pfolder)

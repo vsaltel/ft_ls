@@ -6,13 +6,13 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 17:26:23 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/05 14:32:22 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int		exists(char	*file)
+int			exists(char *file)
 {
 	DIR *folder;
 
@@ -42,7 +42,7 @@ t_folder	*malloc_pfolder(char *path)
 	return (pfolder);
 }
 
-void	set_option(t_option *option, char *str)
+void		set_option(t_option *option, char *str)
 {
 	int i;
 
@@ -52,7 +52,7 @@ void	set_option(t_option *option, char *str)
 		if (str[i] == 'l')
 			option->l = 1;
 		else if (str[i] == 'R')
-			option->R = 1;
+			option->rec = 1;
 		else if (str[i] == 'a')
 			option->a = 1;
 		else if (str[i] == 'r')
@@ -73,7 +73,8 @@ void	set_option(t_option *option, char *str)
 	}
 }
 
-t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **argv)
+t_folder	*parse_options(t_folder *pfolder, t_option *option,
+		int argc, char **argv)
 {
 	t_folder *begin;
 

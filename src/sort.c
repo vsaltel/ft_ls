@@ -6,13 +6,13 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:15:31 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/04 17:11:10 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/05 13:56:32 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-size_t	lst_len(t_folder *lst)
+size_t		lst_len(t_folder *lst)
 {
 	size_t	len;
 
@@ -27,7 +27,7 @@ size_t	lst_len(t_folder *lst)
 	return (len);
 }
 
-void	split_list(t_folder **left, t_folder **right, size_t lstlen)
+void		split_list(t_folder **left, t_folder **right, size_t lstlen)
 {
 	t_folder	*nlst;
 	size_t		mid;
@@ -69,7 +69,7 @@ t_folder	*sort_merge(t_folder *left, t_folder *right, t_option option)
 	return (lst);
 }
 
-void	merge_sort(t_folder **list, t_option option)
+void		merge_sort(t_folder **list, t_option option)
 {
 	size_t		lstlen;
 	t_folder	*left;

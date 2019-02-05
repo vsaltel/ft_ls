@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 14:41:26 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/05 15:01:14 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	test_option(t_folder *pfolder, t_option option)
 {
 	t_folder	*begin;
-	int l = 0;
+	int			l = 0;
 
 	begin = pfolder;
 	printf("----------\n");
@@ -26,7 +26,7 @@ static void	test_option(t_folder *pfolder, t_option option)
 		pfolder = pfolder->next;
 		l++;
 	}
-	printf("l = %d, R = %d, a = %d, r = %d, t = %d", option.l, option.R, option.a, option.r, option.t);
+	printf("l = %d, R = %d, a = %d, r = %d, t = %d", option.l, option.rec, option.a, option.r, option.t);
 	pfolder = begin;
 }
 /* ---------------------------------- */

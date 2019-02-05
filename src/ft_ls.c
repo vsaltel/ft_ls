@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 18:01:39 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/05 15:01:13 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ static int		nb_file(t_folder *pfolder)
 
 static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_option option)
 {
-	struct stat pstat;
-	char *buf;
-	t_folder *new;
-	t_folder *tmp;
-	t_folder *rtr;
-	int i;
+	struct stat	pstat;
+	char		*buf;
+	t_folder	*new;
+	t_folder	*tmp;
+	t_folder	*rtr;
+	int			i;
 
 	//"S_IRUSR", "S_IWUSR", "S_IXUSR", "S_IRGRP", "S_IWGRP", "S_IXGRP", "S_IROTH", "S_IWOTH", "S_IXOTH"
 	i = 0;
@@ -51,7 +51,9 @@ static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_op
 			exit(-1);
 		if (lstat(str_pathfile(buf, pfolder->path, pfolder->file[i].name), &pstat) == -1)
 			perror(buf);
-		else if (S_ISDIR(pstat.st_mode) && ((pstat.st_mode & (S_IXOTH | S_IROTH)) != 0) && (pfolder->file[i].name[0] != '.' || (option.a && can_open_folder(pfolder->file[i].name))))
+		else if (S_ISDIR(pstat.st_mode) && ((pstat.st_mode & (S_IXOTH | S_IROTH)) != 0)
+				&& (pfolder->file[i].name[0] != '.'
+					|| (option.a && can_open_folder(pfolder->file[i].name))))
 		{
 			new = NULL;
 			new = malloc_pfolder(buf);
@@ -73,7 +75,8 @@ static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_op
 	return (rtr);
 }
 
-t_folder		*select_dir(t_folder *pfolder, const t_folder *begin, t_option option)
+t_folder		*select_dir(t_folder *pfolder, const t_folder *begin,
+		t_option option)
 {
 	struct dirent	*dirc;
 	DIR				*dirp;
@@ -100,7 +103,7 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin, t_option option)
 		if (closedir(dirp) != 0)
 			pexit(pfolder->path);
 		display(pfolder, option);
-		if (option.R)
+		if (option.rec)
 			return (recursive_option(pfolder, begin, option));
 	}
 	else
@@ -117,13 +120,12 @@ void			fill_list(t_folder *pfolder, t_option option)
 	while (pfolder)
 	{
 		tmp = pfolder->next;
-
 		if ((pfolder->next != NULL && pfolder == begin) && option.argc > 1)
 			ft_printf("%s:\n", pfolder->path);
 		select_dir(pfolder, begin, option);
-		while (pfolder->next && option.R)
+		while (pfolder->next && option.rec)
 			pfolder = pfolder->next;
-		if (option.R)
+		if (option.rec)
 			pfolder->next = tmp;
 		pfolder = pfolder->next;
 	}

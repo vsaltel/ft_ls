@@ -6,11 +6,12 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 15:32:09 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 14:10:02 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/05 14:10:03 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/ft_ls.h"
+
 /*
 void	test_folder(t_folder *pfolder)
 {
@@ -45,6 +46,7 @@ void	test_folder(t_folder *pfolder)
 	pfolder = begin;
 }
 */
+
 void	test_folder(char **argv, int argc)
 {
 	int			i;
@@ -54,7 +56,7 @@ void	test_folder(char **argv, int argc)
 	argv++;
 	while (i < argc)
 		if (argv[i++][0] != '-')
-			break;
+			break ;
 	while (i < argc)
 	{
 		printf("%s\n", argv[i]);
@@ -65,8 +67,10 @@ void	test_folder(char **argv, int argc)
 			argv[i] = 0;
 		}
 		else
+		{
 			if (closedir(dirp) != 0)
 				pexit(argv[i]);
+		}
 		i++;
 	}
 }
