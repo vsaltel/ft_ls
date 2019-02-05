@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/05 18:11:05 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/05 18:16:00 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ void	display(t_folder *pfolder, t_option option)
 		}
 		j++;
 	}
-	free(tab);
+	if (option.l)
+		free(tab);
 }
 
 void	sort_ascii(t_folder *pfolder)
