@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/06 14:20:02 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/06 18:13:06 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,26 @@
 
 void	fill_other(t_file *pfile, struct stat pstat)
 {
+	char	*str;
+
 	pfile->nlink = pstat.st_nlink;
 	pfile->owner = getpwuid(pstat.st_uid)->pw_name;
 	pfile->group = getgrgid(pstat.st_gid)->gr_name;
 	pfile->major = major(pstat.st_rdev);
 	pfile->minor = minor(pstat.st_rdev);
 	pfile->bytes = pstat.st_size;
-	pfile->date = ft_strdup(&ctime(&pstat.st_mtimespec.tv_sec)[4]);
+	str = ctime(&pstat.st_mtimespec.tv_sec);
+	if (time(NULL) - 15811200 < pstat.st_mtimespec.tv_sec)
+		pfile->date = ft_strdup(&str[4]);
+	else
+	{
+		pfile->date = ft_strdup(&str[4]);
+		pfile->date[7] = str[19];
+		pfile->date[8] = str[20];
+		pfile->date[9] = str[21];
+		pfile->date[10] = str[22];
+		pfile->date[11] = str[23];
+	}
 	pfile->date[12] = '\0';
 }
 
