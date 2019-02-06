@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/05 18:16:00 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/06 12:03:27 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	display(t_folder *pfolder, t_option option)
 		free(tab);
 }
 
-void	sort_ascii(t_folder *pfolder)
+void	sort_ascii(t_folder *pfolder, int ordre)
 {
 	t_file	tmp;
 	int		i;
@@ -80,7 +80,28 @@ void	sort_ascii(t_folder *pfolder)
 	if (pfolder->file[i++].name != 0)
 		while (pfolder->file[i].name != 0)
 		{
-			if (ft_strcmp(pfolder->file[i - 1].name, pfolder->file[i].name) > 0)
+			if ((ordre && ft_strcmp(pfolder->file[i - 1].name, pfolder->file[i].name) > 0) || (!ordre && ft_strcmp(pfolder->file[i - 1].name, pfolder->file[i].name) < 0))
+			{
+				tmp = pfolder->file[i - 1];
+				pfolder->file[i - 1] = pfolder->file[i];
+				pfolder->file[i] = tmp;
+				i = 1;
+			}
+			else
+				i++;
+		}
+}
+
+void	sort_time(t_folder *pfolder)
+{
+	t_file	tmp;
+	int		i;
+
+	i = 0;
+	if (pfolder->file[i++].name != 0)
+		while (pfolder->file[i].name != 0)
+		{
+			if (pfolder->file[i - 1].pstat.st_mtimespec.tv_sec < pfolder->file[i].pstat.st_mtimespec.tv_sec)
 			{
 				tmp = pfolder->file[i - 1];
 				pfolder->file[i - 1] = pfolder->file[i];

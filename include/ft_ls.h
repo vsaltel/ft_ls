@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/05 14:30:38 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/06 12:06:44 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct			s_option
 
 typedef struct			s_file
 {
+	struct stat		pstat;
 	char			*name;
 	char			*mode;
 	char			extand_perm;
@@ -66,13 +67,15 @@ t_folder				*parse_options(t_folder *pfolder,
 						t_option *option, int argc, char **argv);
 void					fill_list(t_folder *pfolder, t_option option);
 void					test_folder(char **argv, int argc);
-void					sort_ascii(t_folder *pfolder);
+void					sort_ascii(t_folder *pfolder, int ordre);
+void					sort_time(t_folder *pfolder);
 void					display(t_folder *pfolder, t_option option);
 t_folder				*select_dir(t_folder *pfolder,
 							const t_folder *begin, t_option option);
 char					*str_pathfile(char *dst, const char *s1,
 							const char *s2);
 int						strl_pathfile(const char *s1, const char *s2);
+void					set_stat(t_folder *pfolder, t_file *pfile);
 void					memset_file(t_file *pfile);
 void					memset_option(t_option *option);
 void					free_folder(t_folder *pfolder, t_option option);

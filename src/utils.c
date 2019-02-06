@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/05 14:32:38 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/06 12:09:02 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,17 @@ int		strl_pathfile(const char *s1, const char *s2)
 		y++;
 	y++;
 	return (i + y);
+}
+
+void	set_stat(t_folder *pfolder, t_file *pfile)
+{
+	char		*buf;
+
+	if (!(buf = malloc(sizeof(char) * strl_pathfile(pfolder->path, pfile->name))))
+		exit(-1);
+	if (lstat(str_pathfile(buf, pfolder->path, pfile->name), &(pfile->pstat)) == -1)
+		perror(buf);
+	free(buf);
 }
 
 void	free_folder(t_folder *pfolder, t_option option)
