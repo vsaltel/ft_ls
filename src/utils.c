@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/06 12:09:02 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/06 15:40:33 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,24 @@ void	memset_file(t_file *pfile)
 	pfile->path_link = NULL;
 }
 
-char	*str_pathfile(char *dst, const char *s1, const char *s2)
+char	*str_withoutpath(char *str)
+{
+	int i;
+	int nb;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])	
+	{
+		if (str[i] == '/')
+			nb = i;	
+		i++;
+	}
+	return (&str[nb + 1]);
+}
+
+static char	*str_pathfile(char *dst, const char *s1, const char *s2)
 {
 	int i;
 
@@ -58,7 +75,7 @@ char	*str_pathfile(char *dst, const char *s1, const char *s2)
 	return (dst);
 }
 
-int		strl_pathfile(const char *s1, const char *s2)
+static int	strl_pathfile(const char *s1, const char *s2)
 {
 	int i;
 	int y;
@@ -85,7 +102,7 @@ void	set_stat(t_folder *pfolder, t_file *pfile)
 		exit(-1);
 	if (lstat(str_pathfile(buf, pfolder->path, pfile->name), &(pfile->pstat)) == -1)
 		perror(buf);
-	free(buf);
+	pfile->path = buf;
 }
 
 void	free_folder(t_folder *pfolder, t_option option)
@@ -103,6 +120,7 @@ void	free_folder(t_folder *pfolder, t_option option)
 			while (pfolder->file[i].name != 0)
 			{
 				free(pfolder->file[i].name);
+				free(pfolder->file[i].path);
 				if (option.l)
 				{
 					free(pfolder->file[i].mode);

@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/06 12:00:14 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/06 14:20:02 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,29 +55,18 @@ void	fill_mode(t_file *pfile, struct stat pstat)
 
 void	ell_option(t_folder *pfolder, t_file *pfile, t_option option)
 {
-	struct stat pstat;
-	char		*buf;
-
-	if (!(buf = malloc(sizeof(char) * strl_pathfile(pfolder->path, pfile->name))))
-		exit(-1);
-	if (lstat(str_pathfile(buf, pfolder->path, pfile->name), &pstat) == -1)
-		perror(buf);
-	else
-	{
-		fill_mode(pfile, pstat);
-		fill_other(pfile, pstat);
+		fill_mode(pfile, pfile->pstat);
+		fill_other(pfile, pfile->pstat);
 		if (pfile->name[0] != '.' || option.a)
-			pfolder->total_blocks += pstat.st_blocks;
-		if (listxattr(buf, NULL, 0, XATTR_NOFOLLOW))
+			pfolder->total_blocks += pfile->pstat.st_blocks;
+		if (listxattr(pfile->path, NULL, 0, XATTR_NOFOLLOW))
 			pfile->extand_perm = '@';
 		if (pfile->mode[0] == 'l')
 		{
 			if (!(pfile->path_link = malloc(sizeof(char) * BUFF_SIZE)))
 				exit(-1);
 			ft_memset(pfile->path_link, '\0', BUFF_SIZE);
-			readlink(buf, pfile->path_link, BUFF_SIZE - 1);
+			readlink(pfile->path, pfile->path_link, BUFF_SIZE - 1);
 		}
-	}
-	free(buf);
 }
 
