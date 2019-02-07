@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/07 13:44:19 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/07 18:45:29 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,19 @@
 int			exists(char *file)
 {
 	DIR *folder;
+	char *tmp;
 
 	if (!file || !(folder = opendir(file)))
+	{
+		tmp = ft_strjoin("ft_ls: ", file);
+		perror(tmp);
+		free(tmp);
+		tmp = NULL;
 		return (0);
-	return (!closedir(folder));
+	}
+	else
+		closedir(folder);
+	return (1);
 }
 
 t_folder	*malloc_pfolder(char *path)
@@ -90,17 +99,25 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option,
 	option->argc = argc;
 	if (argc > 0)
 	{
-		while (!exists(*argv))
+		while (!exists(*argv) && argc > 0)
 		{
-			(*argv)++;
-			argc--;
+			argv = argv + 1;
+			--argc;
+			option->argc++;
+			if (argc == 0)
+				exit(-1);
 		}
 		pfolder = malloc_pfolder(*argv++);
 		begin = pfolder;
 		while (--argc > 0)
 		{
-			pfolder->next = malloc_pfolder(*argv++);
-			pfolder = pfolder->next;
+			if (exists(*argv))
+			{
+				pfolder->next = malloc_pfolder(*argv);
+				pfolder = pfolder->next;
+			}
+			argv = argv + 1;
+			option->argc++;
 		}
 	}
 	else

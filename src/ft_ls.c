@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/07 13:52:57 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/07 18:40:39 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,9 @@ static int		nb_file(t_folder *pfolder)
 			i++;
 	else
 		pexit(ft_strjoin("nb_file opendir ", pfolder->path));
+
+	if (ft_strcmp(pfolder->path, "/dev/fd") == 0 || ft_strcmp(pfolder->path, "/dev/fd/") == 0)
+		i--;
 	pfolder->nb_file = i;
 	if (closedir(dirp) != 0)
 		pexit(ft_strjoin("nb_file closedir ", pfolder->path));
@@ -37,17 +40,13 @@ static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_op
 	t_folder	*rtr;
 	int			i;
 
-	//"S_IRUSR", "S_IWUSR", "S_IXUSR", "S_IRGRP", "S_IWGRP", "S_IXGRP", "S_IROTH", "S_IWOTH", "S_IXOTH"
-	if (option.r)
-		i = pfolder->nb_file - 1;
-	else
-		i = 0;
+	option.r ? (i = pfolder->nb_file - 1) : (i = 0);
 	new = NULL;
 	rtr = NULL;
 	tmp = pfolder;
 	while ((!option.r && pfolder->file[i].name != 0) || (option.r && i >= 0))
 	{
-		if (S_ISDIR(pfolder->file[i].pstat.st_mode) /*&& ((pfolder->file[i].pstat.st_mode & (S_IXOTH | S_IROTH)) != 0)*/ && (pfolder->file[i].name[0] != '.' || (option.a && can_open_folder(pfolder->file[i].name))))
+		if (S_ISDIR(pfolder->file[i].pstat.st_mode) && (pfolder->file[i].name[0] != '.' || (option.a && can_open_folder(pfolder->file[i].name))))
 		{
 			new = NULL;
 			new = malloc_pfolder(pfolder->file[i].path);

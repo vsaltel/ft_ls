@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/06 15:40:33 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/07 17:43:36 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	pexit(char *str)
 
 void	memset_option(t_option *option)
 {
+	option->argc = 0;
 	option->l = 0;
 	option->rec = 0;
 	option->a = 0;
@@ -124,6 +125,8 @@ void	free_folder(t_folder *pfolder, t_option option)
 				if (option.l)
 				{
 					free(pfolder->file[i].mode);
+					free(pfolder->file[i].owner);
+					free(pfolder->file[i].group);
 					free(pfolder->file[i].date);
 				}
 				i++;
