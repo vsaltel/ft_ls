@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/07 18:40:39 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/08 12:13:23 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,11 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin,
 				ell_option(pfolder, &pfolder->file[i - 1], option);
 		}
 		pfolder->file[i].name = 0;
-		option.t ? sort_time(pfolder) : sort_ascii(pfolder);
+
+		if (option.t)
+			sort_time(pfolder);
+		else if (!option.f)
+			sort_ascii(pfolder);
 		if (closedir(dirp) != 0)
 			pexit(pfolder->path);
 		display(pfolder, option);

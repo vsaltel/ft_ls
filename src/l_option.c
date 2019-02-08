@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/07 18:40:43 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/08 12:15:00 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,19 @@
 
 void		fill_other(t_file *pfile, struct stat pstat)
 {
-	char	*str;
+	char			*str;
+	struct passwd	*pwd;
+	struct group	*grp;
 
 	pfile->nlink = pstat.st_nlink;
-	if (getpwuid(pstat.st_gid))
-		pfile->owner = ft_strdup(getpwuid(pstat.st_uid)->pw_name);
+	if ((pwd = getpwuid(pstat.st_uid)))
+		pfile->owner = ft_strdup(pwd->pw_name);
 	else
-		pfile->owner = ft_strdup(ft_itoa(pstat.st_uid)); //private/etc
-	if (getgrgid(pstat.st_gid))
-		pfile->group = ft_strdup(getgrgid(pstat.st_gid)->gr_name);
+		pfile->owner = ft_itoa(pstat.st_uid); //private/etc
+	if ((grp = getgrgid(pstat.st_gid)))
+		pfile->group = ft_strdup(grp->gr_name);
 	else
-		pfile->group = ft_strdup(ft_itoa(pstat.st_gid)); ///private/var/folders/rx
+		pfile->group = ft_itoa(pstat.st_gid); ///private/var/folders/rx
 	pfile->major = major(pstat.st_rdev);
 	pfile->minor = minor(pstat.st_rdev);
 	pfile->bytes = pstat.st_size;
