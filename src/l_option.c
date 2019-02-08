@@ -6,30 +6,16 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/08 12:15:00 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/08 13:30:11 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void		fill_other(t_file *pfile, struct stat pstat)
+static void	fill_time(t_file *pfile, struct stat pstat)
 {
 	char			*str;
-	struct passwd	*pwd;
-	struct group	*grp;
 
-	pfile->nlink = pstat.st_nlink;
-	if ((pwd = getpwuid(pstat.st_uid)))
-		pfile->owner = ft_strdup(pwd->pw_name);
-	else
-		pfile->owner = ft_itoa(pstat.st_uid); //private/etc
-	if ((grp = getgrgid(pstat.st_gid)))
-		pfile->group = ft_strdup(grp->gr_name);
-	else
-		pfile->group = ft_itoa(pstat.st_gid); ///private/var/folders/rx
-	pfile->major = major(pstat.st_rdev);
-	pfile->minor = minor(pstat.st_rdev);
-	pfile->bytes = pstat.st_size;
 	str = ctime(&pstat.st_mtimespec.tv_sec);
 	if (time(NULL) - 15811200 < pstat.st_mtimespec.tv_sec)
 		pfile->date = ft_strdup(&str[4]);
@@ -43,6 +29,26 @@ void		fill_other(t_file *pfile, struct stat pstat)
 		pfile->date[11] = str[23];
 	}
 	pfile->date[12] = '\0';
+}
+
+static void	fill_other(t_file *pfile, struct stat pstat)
+{
+	struct passwd	*pwd;
+	struct group	*grp;
+
+	pfile->nlink = pstat.st_nlink;
+	if ((pwd = getpwuid(pstat.st_uid)))
+		pfile->owner = ft_strdup(pwd->pw_name);
+	else
+		pfile->owner = ft_itoa(pstat.st_uid);
+	if ((grp = getgrgid(pstat.st_gid)))
+		pfile->group = ft_strdup(grp->gr_name);
+	else
+		pfile->group = ft_itoa(pstat.st_gid);
+	pfile->major = major(pstat.st_rdev);
+	pfile->minor = minor(pstat.st_rdev);
+	pfile->bytes = pstat.st_size;
+	fill_time(pfile, pstat);
 }
 
 static void	law_access(t_file *pfile, struct stat pstat)
@@ -67,7 +73,7 @@ static void	law_access(t_file *pfile, struct stat pstat)
 		(pfile->mode[9] = '-');
 }
 
-void		fill_mode(t_file *pfile, struct stat pstat)
+static void	fill_mode(t_file *pfile, struct stat pstat)
 {
 	if (!(pfile->mode = malloc(sizeof(char) * 11)))
 		exit(-1);

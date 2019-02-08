@@ -6,31 +6,13 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/08 12:25:11 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/08 15:34:01 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int			exists(char *file)
-{
-	DIR *folder;
-	char *tmp;
-
-	if (!file || !(folder = opendir(file)))
-	{
-		tmp = ft_strjoin("ft_ls: ", file);
-		perror(tmp);
-		free(tmp);
-		tmp = NULL;
-		return (0);
-	}
-	else
-		closedir(folder);
-	return (1);
-}
-
-t_folder	*malloc_pfolder(char *path)
+t_folder		*malloc_pfolder(char *path)
 {
 	t_folder	*pfolder;
 
@@ -51,12 +33,12 @@ t_folder	*malloc_pfolder(char *path)
 	return (pfolder);
 }
 
-void		set_option(t_option *option, char *str)
+void			set_option(t_option *option, char *str)
 {
 	int i;
 
-	i = 1;
-	while (str[i])
+	i = 0;
+	while (str[++i])
 	{
 		if (str[i] == 'l')
 			option->l = 1;
@@ -69,20 +51,45 @@ void		set_option(t_option *option, char *str)
 		else if (str[i] == 't')
 			option->t = 1;
 		else if (str[i] == 'f')
-		{
 			option->f = 1;
-			option->a = 1;
-		}
 		else
 		{
-			ft_printf("ft_ls: illegal option -- %c\nusage: ft_ls [-lRartf] [file ...]\n", str[i]);
+			ft_printf("ft_ls: illegal option -- %c\n", str[i]);
+			ft_printf("usage: ft_ls [-lRartf] [file ...]\n", str[i]);
 			exit(-1);
 		}
-		i++;
 	}
 }
 
-t_folder	*parse_options(t_folder *pfolder, t_option *option,
+static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
+		int argc, char **argv)
+{
+	t_folder *begin;
+
+	while (!exists(*argv) && argc > 0)
+	{
+		argv = argv + 1;
+		--argc;
+		option->argc++;
+		if (argc == 0)
+			exit(-1);
+	}
+	pfolder = malloc_pfolder(*argv++);
+	begin = pfolder;
+	while (--argc > 0)
+	{
+		if (exists(*argv))
+		{
+			pfolder->next = malloc_pfolder(*argv);
+			pfolder = pfolder->next;
+		}
+		argv = argv + 1;
+		option->argc++;
+	}
+	return (begin);
+}
+
+t_folder		*parse_options(t_folder *pfolder, t_option *option,
 		int argc, char **argv)
 {
 	t_folder *begin;
@@ -98,28 +105,7 @@ t_folder	*parse_options(t_folder *pfolder, t_option *option,
 	}
 	option->argc = argc;
 	if (argc > 0)
-	{
-		while (!exists(*argv) && argc > 0)
-		{
-			argv = argv + 1;
-			--argc;
-			option->argc++;
-			if (argc == 0)
-				exit(-1);
-		}
-		pfolder = malloc_pfolder(*argv++);
-		begin = pfolder;
-		while (--argc > 0)
-		{
-			if (exists(*argv))
-			{
-				pfolder->next = malloc_pfolder(*argv);
-				pfolder = pfolder->next;
-			}
-			argv = argv + 1;
-			option->argc++;
-		}
-	}
+		begin = fill_pfolder(pfolder, option, argc, argv);
 	else
 	{
 		pfolder = malloc_pfolder(NULL);

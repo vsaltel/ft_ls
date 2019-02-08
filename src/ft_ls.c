@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/08 12:13:23 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/08 16:41:51 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int		nb_file(t_folder *pfolder)
 			i++;
 	else
 		pexit(ft_strjoin("nb_file opendir ", pfolder->path));
-
-	if (ft_strcmp(pfolder->path, "/dev/fd") == 0 || ft_strcmp(pfolder->path, "/dev/fd/") == 0)
+	if (ft_strcmp(pfolder->path, "/dev/fd") == 0 ||
+			ft_strcmp(pfolder->path, "/dev/fd/") == 0)
 		i--;
 	pfolder->nb_file = i;
 	if (closedir(dirp) != 0)
@@ -33,73 +33,84 @@ static int		nb_file(t_folder *pfolder)
 	return (i);
 }
 
-static t_folder	*recursive_option(t_folder *pfolder, const t_folder *begin, t_option option)
+static void		fill_subfolder(t_folder *new, t_folder *tmp,
+		const t_folder *begin, t_option option)
+{
+	new->next = tmp->next;
+	tmp->next = new;
+	tmp = new;
+	tmp->next = select_dir(new, begin, option);
+}
+
+static t_folder	*recursive_option(t_folder *p,
+		const t_folder *begin, t_option option)
 {
 	t_folder	*new;
 	t_folder	*tmp;
 	t_folder	*rtr;
 	int			i;
 
-	option.r ? (i = pfolder->nb_file - 1) : (i = 0);
-	new = NULL;
+	option.r ? (i = p->nb_file - 1) :
+		(i = 0);
 	rtr = NULL;
-	tmp = pfolder;
-	while ((!option.r && pfolder->file[i].name != 0) || (option.r && i >= 0))
+	tmp = p;
+	while ((!option.r && p->file[i].name != 0) || (option.r && i >= 0))
 	{
-		if (S_ISDIR(pfolder->file[i].pstat.st_mode) && (pfolder->file[i].name[0] != '.' || (option.a && can_open_folder(pfolder->file[i].name))))
+		if (S_ISDIR(p->file[i].pstat.st_mode) && (p->file[i].name[0] != '.'
+				|| (option.a && can_open_folder(p->file[i].name))))
 		{
 			new = NULL;
-			new = malloc_pfolder(pfolder->file[i].path);
-			if (tmp == pfolder)
+			new = malloc_pfolder(p->file[i].path);
+			if (tmp == p)
 				rtr = new;
-			new->next = tmp->next;
-			tmp->next = new;
-			tmp = new;
-			tmp->next = select_dir(new, begin, option);
+			fill_subfolder(new, tmp, begin, option);
 			while (tmp->next)
 				tmp = tmp->next;
 		}
-		if (option.r)
-			i--;
-		else
-			i++;
+		(option.r) ? i-- : i++;
 	}
 	return (rtr);
+}
+
+static void		dir_process(t_folder *pfolder, DIR *dirp,
+		t_option option)
+{
+	struct dirent	*dirc;
+	int				i;
+
+	nb_file(pfolder);
+	if (!(pfolder->file = malloc(sizeof(t_file) * (pfolder->nb_file + 1))))
+		exit(-1);
+	i = 0;
+	while ((dirc = readdir(dirp)) != NULL)
+	{
+		memset_file(&pfolder->file[i]);
+		pfolder->file[i].name = ft_strdup(dirc->d_name);
+		set_stat(pfolder, &(pfolder->file[i++]));
+		if (option.l)
+			ell_option(pfolder, &pfolder->file[i - 1], option);
+	}
+	pfolder->file[i].name = 0;
+	if (option.t)
+		sort_time(pfolder);
+	else if (!option.f)
+		sort_ascii(pfolder);
+	if (closedir(dirp) != 0)
+		pexit(pfolder->path);
 }
 
 t_folder		*select_dir(t_folder *pfolder, const t_folder *begin,
 		t_option option)
 {
 	char			*tmp;
-	struct dirent	*dirc;
 	DIR				*dirp;
-	int				i;
 
 	dirp = NULL;
 	if (pfolder != begin)
 		ft_printf("\n%s:\n", pfolder->path);
 	if ((dirp = opendir(pfolder->path)) != NULL)
 	{
-		nb_file(pfolder);
-		if (!(pfolder->file = malloc(sizeof(t_file) * (pfolder->nb_file + 1))))
-			exit(-1);
-		i = 0;
-		while ((dirc = readdir(dirp)) != NULL)
-		{
-			memset_file(&pfolder->file[i]);
-			pfolder->file[i].name = ft_strdup(dirc->d_name);
-			set_stat(pfolder, &(pfolder->file[i++]));
-			if (option.l)
-				ell_option(pfolder, &pfolder->file[i - 1], option);
-		}
-		pfolder->file[i].name = 0;
-
-		if (option.t)
-			sort_time(pfolder);
-		else if (!option.f)
-			sort_ascii(pfolder);
-		if (closedir(dirp) != 0)
-			pexit(pfolder->path);
+		dir_process(pfolder, dirp, option);
 		display(pfolder, option);
 		if (option.rec)
 			return (recursive_option(pfolder, begin, option));
@@ -111,25 +122,4 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin,
 		free(tmp);
 	}
 	return (NULL);
-}
-
-void			fill_list(t_folder *pfolder, t_option option)
-{
-	t_folder	*begin;
-	t_folder	*tmp;
-
-	begin = pfolder;
-	while (pfolder)
-	{
-		tmp = pfolder->next;
-		if ((pfolder->next != NULL && pfolder == begin) && option.argc > 1)
-			ft_printf("%s:\n", pfolder->path);
-		select_dir(pfolder, begin, option);
-		while (pfolder->next && option.rec)
-			pfolder = pfolder->next;
-		if (option.rec)
-			pfolder->next = tmp;
-		pfolder = pfolder->next;
-	}
-	pfolder = begin;
 }
