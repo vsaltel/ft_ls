@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/12 18:09:00 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/13 17:55:24 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,15 @@ int				exists(t_file *pfile, char *file)
 
 char			*str_withoutpath(char *str)
 {
-	int i;
-	int nb;
+	size_t	i;
 
-	i = -1;
 	if (!str)
-		return (0);
-	while (str[++i])
+		return (NULL);
+	i = ft_strlen(str);
+	while (i--)
 		if (str[i] == '/')
-			nb = i;
-	return (&str[nb + 1]);
+			return (str + i + 1);
+	return (str);
 }
 
 static char		*str_pathfile(char *dst, const char *s1, const char *s2)

@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 15:20:19 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/13 17:56:18 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin,
 	if ((dirp = opendir(pfolder->path)) != NULL)
 	{
 		dir_process(pfolder, dirp, option);
-		display(pfolder, option);
+		display(pfolder, option, 0);
 		if (option.rec)
 			return (recursive_option(pfolder, begin, option));
 	}

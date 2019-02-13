@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 15:38:49 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/13 17:39:59 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	big_print(t_folder *p, int j, int *tab, t_option option)
 			tab[2], p->file[j].bytes, p->file[j].date, p->file[j].name);
 }
 
-void		display(t_folder *p, t_option option)
+void		display(t_folder *p, t_option option, int isarg)
 {
 	int		i;
 	int		*tab;
@@ -98,7 +98,7 @@ void		display(t_folder *p, t_option option)
 		(i = 0);
 	if (option.l)
 	{
-		if (p->file[0].name != 0)
+		if (p->file[0].name != 0 && !isarg)
 			ft_printf("total %lld\n", p->total_blocks);
 		tab = espace(tab, p, option);
 	}
@@ -136,7 +136,7 @@ void		display_file(t_folder *pfolder, t_option option)
 		sort_time(pfolder);
 	else if (!option.f)
 		sort_ascii(pfolder);
-	display(pfolder, option);
+	display(pfolder, option, 1);
 	if (pfolder->next)
 		ft_putchar('\n');
 }

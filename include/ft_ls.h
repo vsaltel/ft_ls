@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 15:09:21 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/13 17:39:24 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void					test_folder(char **argv, int argc);
 char					*str_withoutpath(char *str);
 void					sort_ascii(t_folder *pfolder);
 void					sort_time(t_folder *pfolder);
-void					display(t_folder *pfolder, t_option option);
+void					display(t_folder *pfolder, t_option option, int isarg);
 void					display_file(t_folder *pfolder, t_option option);
 t_folder				*select_dir(t_folder *pfolder,
 							const t_folder *begin, t_option option);

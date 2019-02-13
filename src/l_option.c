@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 14:41:42 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/13 17:38:29 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,24 +53,15 @@ static void	fill_other(t_file *pfile, struct stat pstat)
 
 static void	law_access(t_file *pfile, struct stat pstat)
 {
-	((pstat.st_mode & (S_IRUSR)) != 0) ? (pfile->mode[1] = 'r') :
-		(pfile->mode[1] = '-');
-	((pstat.st_mode & (S_IWUSR)) != 0) ? (pfile->mode[2] = 'w') :
-		(pfile->mode[2] = '-');
-	((pstat.st_mode & (S_IXUSR)) != 0) ? (pfile->mode[3] = 'x') :
-		(pfile->mode[3] = '-');
-	((pstat.st_mode & (S_IRGRP)) != 0) ? (pfile->mode[4] = 'r') :
-		(pfile->mode[4] = '-');
-	((pstat.st_mode & (S_IWGRP)) != 0) ? (pfile->mode[5] = 'w') :
-		(pfile->mode[5] = '-');
-	((pstat.st_mode & (S_IXGRP)) != 0) ? (pfile->mode[6] = 'x') :
-		(pfile->mode[6] = '-');
-	((pstat.st_mode & (S_IROTH)) != 0) ? (pfile->mode[7] = 'r') :
-		(pfile->mode[7] = '-');
-	((pstat.st_mode & (S_IWOTH)) != 0) ? (pfile->mode[8] = 'w') :
-		(pfile->mode[8] = '-');
-	((pstat.st_mode & (S_IXOTH)) != 0) ? (pfile->mode[9] = 'x') :
-		(pfile->mode[9] = '-');
+	pfile->mode[1] = ((pstat.st_mode & (S_IRUSR)) != 0) ? 'r' : '-';
+	pfile->mode[2] = ((pstat.st_mode & (S_IWUSR)) != 0) ? 'w' : '-';
+	pfile->mode[3] = ((pstat.st_mode & (S_IXUSR)) != 0) ? 'x' : '-';
+	pfile->mode[4] = ((pstat.st_mode & (S_IRGRP)) != 0) ? 'r' : '-';
+	pfile->mode[5] = ((pstat.st_mode & (S_IWGRP)) != 0) ? 'w' : '-';
+	pfile->mode[6] = ((pstat.st_mode & (S_IXGRP)) != 0) ? 'x' : '-';
+	pfile->mode[7] = ((pstat.st_mode & (S_IROTH)) != 0) ? 'r' : '-';
+	pfile->mode[8] = ((pstat.st_mode & (S_IWOTH)) != 0) ? 'w' : '-';
+	pfile->mode[9] = ((pstat.st_mode & (S_IXOTH)) != 0) ? 'x' : '-';
 }
 
 static void	fill_mode(t_file *pfile, struct stat pstat)

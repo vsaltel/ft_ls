@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:47:37 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/01 16:52:17 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/13 15:03:57 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdarg.h>
 # include "libft.h"
 
-# define BUFF_SIZE	2048
+# define BUFF_SIZE			2048
 
 typedef enum				e_asize
 {
@@ -42,9 +42,11 @@ typedef struct				s_arg
 	int						space : 1;
 	int						positive : 1;
 	int						has_precision : 1;
-	int						precision;
-	int						width;
+	long					precision;
+	long					width;
 	t_asize					size;
+	int						skipargs;
+	int						wildcards;
 	union
 	{
 		long long			ll;
@@ -61,6 +63,7 @@ typedef struct				s_arg
 int							ft_printf(char *format, ...);
 void						parse_args(char *format, t_arg **alst,
 													va_list *args);
+void						parse_size(char *format, size_t i, t_arg *arg);
 void						fill_arg(t_arg *alst, va_list *args);
 void						convert(t_arg *arg);
 
@@ -74,6 +77,9 @@ int							size_base(char c);
 char						*create_base(unsigned int base, char maj);
 int							is_infinite(t_arg *arg);
 int							is_nan(t_arg *arg);
+int							is_float_neg(t_arg *arg);
+void						handle_inf(t_arg *arg);
+__int128_t					fround(long double d, int precision);
 
 void						itoa_signed(t_arg *arg);
 void						itoa_unsigned(t_arg *arg);
