@@ -3,43 +3,57 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 14:36:39 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/12 18:09:44 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
-/* --(a retirer avant de last push)-- */
-static void	test_option(t_folder *pfolder, t_option option)
+void	fill_list(t_folder *pfolder, t_option option)
 {
+	t_folder	*folderfile;
 	t_folder	*begin;
-	int l = 0;
+	t_folder	*tmp;
 
+	folderfile = pfolder;
+	pfolder = pfolder->next;
 	begin = pfolder;
-	printf("----------\n");
 	while (pfolder)
 	{
-		printf("path[%d] = %s\n", l, pfolder->path);
+		tmp = pfolder->next;
+		if (((pfolder->next != NULL || folderfile->nb_file) &&
+					pfolder == begin) && option.argc > 1)
+			ft_printf("%s:\n", pfolder->path);
+		select_dir(pfolder, begin, option);
+		while (pfolder->next && option.rec)
+			pfolder = pfolder->next;
+		if (option.rec)
+			pfolder->next = tmp;
 		pfolder = pfolder->next;
-		l++;
 	}
-	printf("l = %d, R = %d, a = %d, r = %d, t = %d", option.l, option.R, option.a, option.r, option.t);
 	pfolder = begin;
 }
-/* ---------------------------------- */
 
-int			main(int argc, char **argv)
+int		main(int argc, char **argv)
 {
-	t_option	option;	
+	t_option	option;
 	t_folder	*pfolder;
 
-	//test_folder(argv, argc);
 	pfolder = parse_options(pfolder, &option, argc, argv);
-	fill_list(pfolder, option);	
-	//test_option(pfolder, option);
+	if (!option.f)
+		merge_sort(&(pfolder->next), option);
+	else
+	{
+		option.a = 1;
+		option.t = 0;
+		option.r = 0;
+	}
+	if (pfolder->nb_file)
+		display_file(pfolder, option);
+	fill_list(pfolder, option);
 	free_folder(pfolder, option);
 	return (0);
 }

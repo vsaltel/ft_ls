@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/02/04 16:17:58 by vsaltel          ###   ########.fr        #
+#    Updated: 2019/02/13 15:16:12 by vsaltel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC		=	gcc
 CFLAGS = -g -fsanitize=address
 
 NAME 	=	ft_ls
-LIBFT	=	libft
+LIBFT	=	libftprintf
 SRCDIR	=	src
 INCDIR	=	include
 OBJDIR	=	objs
@@ -25,6 +25,8 @@ FILES 	=	ft_ls.c				\
 			utils.c				\
 			utils2.c			\
 			l_option.c			\
+			sort.c				\
+			free.c				\
 			main.c
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS 	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
@@ -48,13 +50,13 @@ _WHITE=\x1b[37m
 $(NAME): $(OBJS)
 	@$(MAKE) -q -C $(LIBFT) || $(MAKE) -C $(LIBFT)
 	@echo "${_BLUE}${_BOLD}[Create Executable] $(NAME)${_END}"
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L./$(LIBFT) -lft
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L./$(LIBFT) -lftprintf
 	@echo "${_GREEN}${_BOLD}$(NAME) done.${_END}"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
 	@[ -d $(OBJDIR) ] || mkdir -p $(OBJDIR)
 	@echo "${_PURPLE}Compiling $<${_END}"
-	@$(CC) $(CFLAGS) -I $(INCDIR) -I $(LIBFT)/includes -o $@ -c $<
+	@$(CC) $(CFLAGS) -I $(INCDIR) -I $(LIBFT)/include -o $@ -c $<
 
 all: $(NAME)
 
