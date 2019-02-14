@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 17:55:24 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/14 15:57:09 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,6 @@ int				exists(t_file *pfile, char *file)
 		pfile->pstat = pstat;
 		return (2);
 	}
-}
-
-char			*str_withoutpath(char *str)
-{
-	size_t	i;
-
-	if (!str)
-		return (NULL);
-	i = ft_strlen(str);
-	while (i--)
-		if (str[i] == '/')
-			return (str + i + 1);
-	return (str);
 }
 
 static char		*str_pathfile(char *dst, const char *s1, const char *s2)
@@ -81,6 +68,20 @@ static int		strl_pathfile(const char *s1, const char *s2)
 		y++;
 	y++;
 	return (i + y);
+}
+
+int				test_lawaccess(char *path, char *file)
+{
+	struct stat	pstat;
+	char		*buf;
+
+	if (!(buf = malloc(sizeof(char) * strl_pathfile(path, file))))
+		exit(-1);
+	str_pathfile(buf, path, file);
+	if (stat(buf, &pstat) == -1)
+		return (0);
+	else
+		return (1);
 }
 
 void			set_stat(t_folder *pfolder, t_file *pfile)

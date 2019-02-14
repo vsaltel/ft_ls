@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 17:39:24 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/14 15:57:01 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef struct			s_option
 	int				r : 1;
 	int				t : 1;
 	int				f : 1;
+	int				un : 1;
 }						t_option;
 
 typedef struct			s_file
@@ -85,5 +86,6 @@ void					ell_option(t_folder *pfolder, t_file *pfile,
 							t_option option);
 int						can_open_folder(char *folder);
 void					merge_sort(t_folder **list, t_option option);
+int						test_lawaccess(char *path, char *file);
 
 #endif

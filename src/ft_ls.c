@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 17:56:18 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/14 15:57:00 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static int		nb_file(t_folder *pfolder, t_option option)
 	if ((dirp = opendir(pfolder->path)) != NULL)
 		while ((dirc = readdir(dirp)) != NULL)
 		{
+			if (!test_lawaccess(pfolder->path, dirc->d_name))
+				return (-1);
 			if (dirc->d_name[0] != '.' || option.a)
 				i++;
 		}
@@ -74,13 +76,14 @@ static t_folder	*recursive_option(t_folder *p,
 	return (rtr);
 }
 
-static void		dir_process(t_folder *pfolder, DIR *dirp,
+static int		dir_process(t_folder *pfolder, DIR *dirp,
 		t_option option)
 {
 	struct dirent	*dirc;
 	int				i;
 
-	nb_file(pfolder, option);
+	if (nb_file(pfolder, option) == -1)
+		return (0);
 	if (!(pfolder->file = malloc(sizeof(t_file) * (pfolder->nb_file + 1))))
 		exit(-1);
 	i = 0;
@@ -102,6 +105,7 @@ static void		dir_process(t_folder *pfolder, DIR *dirp,
 		sort_ascii(pfolder);
 	if (closedir(dirp) != 0)
 		pexit(pfolder->path);
+	return (1);
 }
 
 t_folder		*select_dir(t_folder *pfolder, const t_folder *begin,
@@ -115,10 +119,12 @@ t_folder		*select_dir(t_folder *pfolder, const t_folder *begin,
 		ft_printf("\n%s:\n", pfolder->path);
 	if ((dirp = opendir(pfolder->path)) != NULL)
 	{
-		dir_process(pfolder, dirp, option);
-		display(pfolder, option, 0);
-		if (option.rec)
-			return (recursive_option(pfolder, begin, option));
+		if (dir_process(pfolder, dirp, option))
+		{
+			display(pfolder, option, 0);
+			if (option.rec)
+				return (recursive_option(pfolder, begin, option));
+		}
 	}
 	else
 	{

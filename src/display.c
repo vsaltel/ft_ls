@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 17:39:59 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/14 19:34:25 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,33 +60,60 @@ static int	*colonne(int *tab, t_folder *p, t_option option)
 			word_size = ft_strlen(p->file[i].name);
 	}
 	tab[0] = word_size + 1;
-	tab[1] = w.ws_col / (word_size + 1);
+	tab[2] = (((word_size + 1) * p->nb_file) / w.ws_col) + 1;
+	tab[1] = p->nb_file / tab[2];
 	tab[2] = p->nb_file / tab[1];
+	if ((p->nb_file % tab[2]) > (tab[2] / 2))
+		(tab[1])++;
+	//tab[1] = (w.ws_col / (word_size + 1));
 	if (tab[2] == 0)
 		tab[2] = 1;
-	//ft_printf("%d %d %d %d %d\n", w.ws_col, tab[0], tab[1], tab[2], p->nb_file);
+	//ft_printf("taille ligne = %d, largest word[0] = %d, mots dispo/ligne[1] = %d, nb lignes[2] = %d, nb files = %d\n", w.ws_col, tab[0], tab[1], tab[2], p->nb_file);
 	return (tab);
 }
 
 static void	big_print(t_folder *p, int j, int *tab, t_option option)
 {
 	if (p->file[j].mode[0] == 'l')
-		printf("%s%-1c %*d %-*s  %-*s  %*d %s %s -> %s\n",
+		ft_printf("%s%-1c %*d %-*s  %-*s  %*d %s %s -> %s\n",
 			p->file[j].mode, p->file[j].extand_perm, tab[3], p->file[j].nlink,
 			tab[0], p->file[j].owner, tab[1], p->file[j].group,
 			tab[2], p->file[j].bytes, p->file[j].date,
 			p->file[j].name, p->file[j].path_link);
 	else if (p->file[j].mode[0] == 'c' || p->file[j].mode[0] == 'b')
-		printf("%s%-1c %*d %-*s  %-*s  %*d, %3d %s %s\n",
+		ft_printf("%s%-1c %*d %-*s  %-*s  %*d, %3d %s %s\n",
 			p->file[j].mode, p->file[j].extand_perm, tab[3], p->file[j].nlink,
 			tab[0], p->file[j].owner, tab[1], p->file[j].group,
 			tab[2] - 5 >= 0 ? tab[2] - 5 : 0, p->file[j].major,
 			p->file[j].minor, p->file[j].date, p->file[j].name);
 	else
-		printf("%s%c %*d %-*s  %-*s  %*d %s %s\n",
+		ft_printf("%s%c %*d %-*s  %-*s  %*d %s %s\n",
 			p->file[j].mode, p->file[j].extand_perm, tab[3], p->file[j].nlink,
 			tab[0], p->file[j].owner, tab[1], p->file[j].group,
 			tab[2], p->file[j].bytes, p->file[j].date, p->file[j].name);
+}
+
+void		display_col(t_folder *p, int *tab, t_option option, int isarg)
+{
+	int i;
+	int j;
+	int k;
+
+	j = 0;
+	while (j < tab[2])
+	{
+		option.r ? (i = p->nb_file - 1) :
+			(i = 0);
+		k = 0;
+		while (i + j < p->nb_file && k <= tab[1])
+		{
+			ft_printf("%-*s", tab[0], p->file[i + j].name);
+			i = i + tab[2];
+			k++;
+		}
+		ft_putchar('\n');
+		j++;
+	}
 }
 
 void		display(t_folder *p, t_option option, int isarg)
@@ -94,6 +121,7 @@ void		display(t_folder *p, t_option option, int isarg)
 	int		i;
 	int		*tab;
 
+	tab = NULL;
 	option.r ? (i = p->nb_file - 1) :
 		(i = 0);
 	if (option.l)
@@ -104,24 +132,24 @@ void		display(t_folder *p, t_option option, int isarg)
 	}
 	else
 		tab = colonne(tab, p, option);
-	while ((!option.r && p->file[i].name != 0) || (option.r && i >= 0))
+	if (!option.l && !option.un)
+		display_col(p, tab, option, isarg);
+	else
 	{
-		if (option.l)
-			big_print(p, i, tab, option);
-		else
+		while ((!option.r && p->file[i].name != 0) || (option.r && i >= 0))
 		{
-			ft_printf("%s\n", p->file[i].name);
-			/*
-			if ((!option.r && i % tab[1] == 0 && i != 0) || (!option.r && (p->nb_file - i) % tab[1] == 0 && i != p->nb_file))
-				printf("%-*s\n", tab[0], p->file[i * tab[2]].name);
-			else
-				printf("%-*s", tab[0], p->file[i * tab[2]].name);
-				*/
+			if (option.l)
+				big_print(p, i, tab, option);
+			else if (option.un)
+					ft_printf("%s\n", p->file[i].name);
+			option.r ? i-- : i++;
 		}
-		option.r ? i-- : i++;
 	}
-	if (option.l)
-		free(tab);
+	/*
+	if (!option.un && p->nb_file % tab[1] != 0)
+		ft_putchar('\n');
+		*/
+	free(tab);
 }
 
 void		display_file(t_folder *pfolder, t_option option)

@@ -6,7 +6,7 @@
 /*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 15:32:09 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/08 15:35:05 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/14 15:56:48 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	memset_option(t_option *option)
 	option->argc = 0;
 	option->l = 0;
 	option->rec = 0;
+	option->un = 0;
 	option->a = 0;
 	option->r = 0;
 	option->t = 0;
@@ -56,4 +57,17 @@ int		can_open_folder(char *folder)
 	else if (folder[0] == '.' && folder[1] == '.' && len == 2)
 		return (0);
 	return (1);
+}
+
+char			*str_withoutpath(char *str)
+{
+	size_t	i;
+
+	if (!str)
+		return (NULL);
+	i = ft_strlen(str);
+	while (i--)
+		if (str[i] == '/')
+			return (str + i + 1);
+	return (str);
 }

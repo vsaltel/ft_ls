@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 12:17:03 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/14 19:34:24 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,17 @@ void			set_option(t_option *option, char *str)
 	while (str[++i])
 	{
 		if (str[i] == 'l')
+		{
+			option->un = 0;
 			option->l = 1;
+		}
 		else if (str[i] == 'R')
 			option->rec = 1;
+		else if (str[i] == '1')
+		{
+			option->un = 1;
+			option->l = 0;
+		}
 		else if (str[i] == 'a')
 			option->a = 1;
 		else if (str[i] == 'r')
