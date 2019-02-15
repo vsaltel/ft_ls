@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 15:34:32 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 14:50:07 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 18:26:16 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	free_file(t_file *pfile, t_option option)
 		free(pfile->path);
 	if (option.l)
 	{
+		if (pfile->path_link)
+			free(pfile->path_link);
 		free(pfile->mode);
 		free(pfile->owner);
 		free(pfile->group);

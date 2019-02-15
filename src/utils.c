@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 16:09:20 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 17:57:08 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,14 @@ int				test_lawaccess(char *path, char *file)
 {
 	struct stat	pstat;
 	char		*buf;
+	int			rtr;
 
 	if (!(buf = malloc(sizeof(char) * strl_pathfile(path, file))))
 		exit(-1);
 	str_pathfile(buf, path, file);
-	if (stat(buf, &pstat) == -1)
+	rtr = stat(buf, &pstat);
+	free(buf);
+	if (rtr == -1)
 		return (0);
 	else
 		return (1);
