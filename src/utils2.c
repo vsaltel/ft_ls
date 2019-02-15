@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 15:32:09 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/14 15:56:48 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 12:43:56 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,25 @@ void	memset_option(t_option *option)
 	option->f = 0;
 }
 
-void	memset_file(t_file *pfile)
+t_file	*memset_file(t_file *pfile)
 {
-	pfile->name = NULL;
-	pfile->mode = NULL;
-	pfile->extand_perm = ' ';
-	pfile->nlink = 0;
-	pfile->owner = NULL;
-	pfile->group = NULL;
-	pfile->bytes = 0;
-	pfile->date = NULL;
-	pfile->path_link = NULL;
+	t_file	*new;
+
+	if (!(new = (t_file *)malloc(sizeof(t_file))))
+		return (NULL);
+	if (pfile)
+		pfile->next = new;
+	new->name = NULL;
+	new->mode = NULL;
+	new->extand_perm = ' ';
+	new->nlink = 0;
+	new->owner = NULL;
+	new->group = NULL;
+	new->bytes = 0;
+	new->date = NULL;
+	new->path_link = NULL;
+	new->next = NULL;
+	return (new);
 }
 
 int		can_open_folder(char *folder)

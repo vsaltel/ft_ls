@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort.c                                             :+:      :+:    :+:   */
+/*   sort_folder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:15:31 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/12 18:10:25 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 16:49:16 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-size_t		lst_len(t_folder *lst)
+static size_t	lst_len(t_folder *lst)
 {
 	size_t	len;
 
@@ -27,7 +27,7 @@ size_t		lst_len(t_folder *lst)
 	return (len);
 }
 
-void		split_list(t_folder **left, t_folder **right, size_t lstlen)
+static void		split_list(t_folder **left, t_folder **right, size_t lstlen)
 {
 	t_folder	*nlst;
 	size_t		mid;
@@ -43,7 +43,7 @@ void		split_list(t_folder **left, t_folder **right, size_t lstlen)
 	(*right) = nlst;
 }
 
-t_folder	*sort_merge(t_folder *left, t_folder *right, t_option option)
+static t_folder	*sort_merge(t_folder *left, t_folder *right, t_option option)
 {
 	t_folder	*lst;
 	long		cmp;
@@ -52,10 +52,7 @@ t_folder	*sort_merge(t_folder *left, t_folder *right, t_option option)
 		return (right);
 	else if (!right)
 		return (left);
-	if (option.t)
-		cmp = left->nb_file - right->nb_file;
-	else
-		cmp = ft_strcmp(left->path, right->path);
+	cmp = ft_strcmp(left->path, right->path);
 	if ((cmp < 0 && !option.r) || (cmp > 0 && option.r))
 	{
 		lst = left;
@@ -69,7 +66,7 @@ t_folder	*sort_merge(t_folder *left, t_folder *right, t_option option)
 	return (lst);
 }
 
-void		merge_sort(t_folder **list, t_option option)
+void			merge_sort_folder(t_folder **list, t_option option)
 {
 	size_t		lstlen;
 	t_folder	*left;
@@ -80,8 +77,8 @@ void		merge_sort(t_folder **list, t_option option)
 	lstlen = lst_len(*list);
 	left = *list;
 	split_list(&left, &right, lstlen);
-	merge_sort(&left, option);
-	merge_sort(&right, option);
+	merge_sort_folder(&left, option);
+	merge_sort_folder(&right, option);
 	*list = sort_merge(left, right, option);
 }
 

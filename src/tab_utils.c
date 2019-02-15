@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   tab_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/06 16:47:58 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/15 14:06:14 by frossiny         ###   ########.fr       */
+/*   Created: 2019/02/15 14:20:14 by frossiny          #+#    #+#             */
+/*   Updated: 2019/02/15 14:29:51 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_ls.h"
 
-size_t	ft_strlen(const char *s)
+int		*malloc_tab(size_t len)
 {
-	int		len;
-	char	*str;
+	int		*tab;
+	size_t	i;
 
-	len = 0;
-	str = (char *)s;
-	if (str == NULL)
-		return (0);
-	while (*str++ != '\0')
-		len++;
-	return (len);
+	if (!(tab = (int *)malloc(sizeof(int) * len)))
+		return (NULL);
+	i = -1;
+	while (++i < len)
+		tab[i] = 0;
+	return (tab);
+}
+
+t_file	*get_lstfile(t_file *files, size_t index)
+{
+	if (!files)
+		return (NULL);
+	while (index--)
+		files = files->next;
+	return (files);
 }

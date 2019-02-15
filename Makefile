@@ -6,7 +6,7 @@
 #    By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/02/13 15:16:12 by vsaltel          ###   ########.fr        #
+#    Updated: 2019/02/15 14:50:18 by frossiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,9 +25,11 @@ FILES 	=	ft_ls.c				\
 			utils.c				\
 			utils2.c			\
 			l_option.c			\
-			sort.c				\
+			sort_folder.c		\
+			sort_file.c			\
 			free.c				\
-			main.c
+			main.c				\
+			tab_utils.c
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS 	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
@@ -61,7 +63,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 all: $(NAME)
 
 clean:
-	#@make -C $(LIBFT) clean
+	@make -C $(LIBFT) clean
 	@echo "${_RED}${_BOLD}Cleaning obj files...${_END}"
 	@rm -f $(OBJS)
 

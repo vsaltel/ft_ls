@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/14 19:34:24 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 16:24:45 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,17 @@ static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
 {
 	int			rtr;
 	t_folder	*begin;
+	t_file		*current;
 	int			i;
 
 	i = 0;
 	pfolder = malloc_pfolder("file");
 	begin = pfolder;
-	if (!(pfolder->file = malloc(sizeof(t_file) * (argc + 1))))
-		exit(-1);
-	memset_file(&(pfolder->file[i]));
+	current = begin->file;
 	begin->nb_file = 0;
 	while (argc-- > 0)
 	{
-		if ((rtr = exists(&(begin->file[i]), *argv)))
+		if ((rtr = exists(NULL, *argv)))
 		{
 			if (rtr == 1)
 			{
@@ -94,16 +93,20 @@ static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
 			}
 			else if (rtr == 2)
 			{
-				begin->file[i].name = ft_strdup(*argv);
-				begin->file[i++].path = NULL;
-				memset_file(&(begin->file[i]));
+				if (!(current = memset_file(current)))
+					exit(-1);
+				if (!begin->file)
+					begin->file = current;
+				current->name = ft_strdup(*argv);
+				current->path = NULL;
+				if (lstat(current->name, &(current->pstat)) == -1)
+					perror(current->name);
 				begin->nb_file++;
 			}
 		}
 		argv = argv + 1;
 		option->argc++;
 	}
-	begin->file[i].name = 0;
 	return (begin);
 }
 

@@ -6,127 +6,128 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/14 19:34:25 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 16:28:26 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
 static int	*espace(int *tab, t_folder *p, t_option option)
 {
-	int		i;
+	t_file	*current;
+	char	*tmp;
 
-	if (!(tab = malloc(sizeof(int) * 4)))
+	if (!(tab = malloc_tab(4)))
 		exit(-1);
-	i = -1;
-	while (++i < 4)
-		tab[i] = 0;
-	i = -1;
-	while (p->file[++i].name != 0)
+	current = p->file;
+	while (current)
 	{
-		if (tab[0] < ft_strlen(p->file[i].owner))
-			tab[0] = ft_strlen(p->file[i].owner);
-		if (tab[1] < ft_strlen(p->file[i].group))
-			tab[1] = ft_strlen(p->file[i].group);
-		if (tab[2] < ft_strlen(ft_itoa(p->file[i].bytes)))
-			tab[2] = ft_strlen(ft_itoa(p->file[i].bytes));
-		if (tab[2] < 8 && p->file[i].major)
+		if (tab[0] < ft_strlen(current->owner))
+			tab[0] = ft_strlen(current->owner);
+		if (tab[1] < ft_strlen(current->group))
+			tab[1] = ft_strlen(current->group);
+		tmp = ft_itoa(current->bytes);
+		if (tab[2] < ft_strlen(tmp))
+			tab[2] = ft_strlen(tmp);
+		free(tmp);
+		if (tab[2] < 8 && current->major)
 			tab[2] = 8;
-		if (tab[3] < ft_strlen(ft_itoa(p->file[i].nlink)))
-			tab[3] = ft_strlen(ft_itoa(p->file[i].nlink));
+		tmp = ft_itoa(current->nlink);
+		if (tab[3] < ft_strlen(tmp))
+			tab[3] = ft_strlen(tmp);
+		free(tmp);
+		current = current->next;
 	}
 	return (tab);
 }
 
 static int	*colonne(int *tab, t_folder *p, t_option option)
 {
-	int		i;
-	int		word_size;
-	int		nb_file_a;
-	struct winsize w;
+	int				word_size;
+	int				nb_file_a;
+	t_file			*current;
+	struct winsize	w;
 
 	ioctl(0, TIOCGWINSZ, &w);
-	if (!(tab = malloc(sizeof(int) * 3)))
+	if (!(tab = malloc_tab(3)))
 		exit(-1);
 	word_size = 0;
 	nb_file_a = 0;
-	i = -1;
-	while (++i < 3)
-		tab[i] = 0;
-	i = -1;
-	while (p->file[++i].name != 0)
+	current = p->file;
+	while (current)
 	{
-		if (word_size < ft_strlen(p->file[i].name))
-			word_size = ft_strlen(p->file[i].name);
+		if (word_size < ft_strlen(current->name))
+			word_size = ft_strlen(current->name);
+		current = current->next;
 	}
 	tab[0] = word_size + 1;
-	tab[2] = (((word_size + 1) * p->nb_file) / w.ws_col) + 1;
-	tab[1] = p->nb_file / tab[2];
+	tab[1] = w.ws_col / tab[0];
 	tab[2] = p->nb_file / tab[1];
-	if ((p->nb_file % tab[2]) > (tab[2] / 2))
-		(tab[1])++;
-	//tab[1] = (w.ws_col / (word_size + 1));
-	if (tab[2] == 0)
-		tab[2] = 1;
-	//ft_printf("taille ligne = %d, largest word[0] = %d, mots dispo/ligne[1] = %d, nb lignes[2] = %d, nb files = %d\n", w.ws_col, tab[0], tab[1], tab[2], p->nb_file);
+	if (p->nb_file > tab[1] * tab[2])
+	{
+		tab[2]++;
+		tab[1] = p->nb_file / tab[2] + 1;
+	}
 	return (tab);
-}
-
-static void	big_print(t_folder *p, int j, int *tab, t_option option)
-{
-	if (p->file[j].mode[0] == 'l')
-		ft_printf("%s%-1c %*d %-*s  %-*s  %*d %s %s -> %s\n",
-			p->file[j].mode, p->file[j].extand_perm, tab[3], p->file[j].nlink,
-			tab[0], p->file[j].owner, tab[1], p->file[j].group,
-			tab[2], p->file[j].bytes, p->file[j].date,
-			p->file[j].name, p->file[j].path_link);
-	else if (p->file[j].mode[0] == 'c' || p->file[j].mode[0] == 'b')
-		ft_printf("%s%-1c %*d %-*s  %-*s  %*d, %3d %s %s\n",
-			p->file[j].mode, p->file[j].extand_perm, tab[3], p->file[j].nlink,
-			tab[0], p->file[j].owner, tab[1], p->file[j].group,
-			tab[2] - 5 >= 0 ? tab[2] - 5 : 0, p->file[j].major,
-			p->file[j].minor, p->file[j].date, p->file[j].name);
-	else
-		ft_printf("%s%c %*d %-*s  %-*s  %*d %s %s\n",
-			p->file[j].mode, p->file[j].extand_perm, tab[3], p->file[j].nlink,
-			tab[0], p->file[j].owner, tab[1], p->file[j].group,
-			tab[2], p->file[j].bytes, p->file[j].date, p->file[j].name);
 }
 
 void		display_col(t_folder *p, int *tab, t_option option, int isarg)
 {
 	int i;
-	int j;
-	int k;
+	int l;
+	int c;
+	t_file	*file;
 
-	j = 0;
-	while (j < tab[2])
+	l = 0;
+	while (l < tab[2])
 	{
-		option.r ? (i = p->nb_file - 1) :
-			(i = 0);
-		k = 0;
-		while (i + j < p->nb_file && k <= tab[1])
+		i = 0;
+		c = 0;
+		while (i + l < p->nb_file && c <= tab[1])
 		{
-			ft_printf("%-*s", tab[0], p->file[i + j].name);
-			i = i + tab[2];
-			k++;
+			file = get_lstfile(p->file, i + l);
+			if (file)
+				ft_printf("%-*s", tab[0], file->name);
+			i += tab[2];
+			c++;
 		}
 		ft_putchar('\n');
-		j++;
+		l++;
 	}
+}
+
+static void	big_print(t_file *file, int *tab, t_option option)
+{
+	if (file->mode[0] == 'l')
+		ft_printf("%s%-1c %*d %-*s  %-*s  %*d %s %s -> %s\n",
+			file->mode, file->extand_perm, tab[3], file->nlink,
+			tab[0], file->owner, tab[1], file->group,
+			tab[2], file->bytes, file->date,
+			file->name, file->path_link);
+	else if (file->mode[0] == 'c' || file->mode[0] == 'b')
+		ft_printf("%s%-1c %*d %-*s  %-*s  %*d, %3d %s %s\n",
+			file->mode, file->extand_perm, tab[3], file->nlink,
+			tab[0], file->owner, tab[1], file->group,
+			tab[2] - 5 >= 0 ? tab[2] - 5 : 0, file->major,
+			file->minor, file->date, file->name);
+	else
+		ft_printf("%s%c %*d %-*s  %-*s  %*d %s %s\n",
+			file->mode, file->extand_perm, tab[3], file->nlink,
+			tab[0], file->owner, tab[1], file->group,
+			tab[2], file->bytes, file->date, file->name);
 }
 
 void		display(t_folder *p, t_option option, int isarg)
 {
 	int		i;
 	int		*tab;
+	t_file	*current;
 
 	tab = NULL;
-	option.r ? (i = p->nb_file - 1) :
-		(i = 0);
+	option.r ? (i = p->nb_file - 1) : (i = 0);
 	if (option.l)
 	{
-		if (p->file[0].name != 0 && !isarg)
+		if (p->file && !isarg)
 			ft_printf("total %lld\n", p->total_blocks);
 		tab = espace(tab, p, option);
 	}
@@ -136,13 +137,14 @@ void		display(t_folder *p, t_option option, int isarg)
 		display_col(p, tab, option, isarg);
 	else
 	{
-		while ((!option.r && p->file[i].name != 0) || (option.r && i >= 0))
+		current = p->file;
+		while (current)
 		{
 			if (option.l)
-				big_print(p, i, tab, option);
+				big_print(current, tab, option);
 			else if (option.un)
-					ft_printf("%s\n", p->file[i].name);
-			option.r ? i-- : i++;
+					ft_printf("%s\n", current->name);
+			current = current->next;
 		}
 	}
 	/*
@@ -154,16 +156,15 @@ void		display(t_folder *p, t_option option, int isarg)
 
 void		display_file(t_folder *pfolder, t_option option)
 {
-	int i;
+	t_file	*current;
 
-	i = -1;
+	current = pfolder->file;
 	if (option.l)
-		while (pfolder->file[++i].name != 0)
-			ell_option(pfolder, &pfolder->file[i], option);
-	if (option.t)
-		sort_time(pfolder);
-	else if (!option.f)
-		sort_ascii(pfolder);
+		while (current)
+		{
+			ell_option(pfolder, current, option);
+			current = current->next;
+		}
 	display(pfolder, option, 1);
 	if (pfolder->next)
 		ft_putchar('\n');

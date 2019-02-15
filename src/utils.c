@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/14 15:57:09 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 16:09:20 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,15 @@ int				exists(t_file *pfile, char *file)
 		return (1);
 	else
 	{
-		pfile->pstat = pstat;
+		if (pfile)
+			pfile->pstat = pstat;
 		return (2);
 	}
 }
 
 static char		*str_pathfile(char *dst, const char *s1, const char *s2)
 {
-	int i;
+	size_t i;
 
 	i = 0;
 	if (!s1 || !s2)
@@ -51,10 +52,10 @@ static char		*str_pathfile(char *dst, const char *s1, const char *s2)
 	return (dst);
 }
 
-static int		strl_pathfile(const char *s1, const char *s2)
+static size_t	strl_pathfile(const char *s1, const char *s2)
 {
-	int i;
-	int y;
+	size_t i;
+	size_t y;
 
 	i = 0;
 	y = 0;

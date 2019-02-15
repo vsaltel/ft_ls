@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/14 15:57:00 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 14:46:52 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,25 +53,25 @@ static t_folder	*recursive_option(t_folder *p,
 	t_folder	*new;
 	t_folder	*tmp;
 	t_folder	*rtr;
+	t_file		*current;
 	int			i;
 
-	option.r ? (i = p->nb_file - 1) :
-		(i = 0);
 	rtr = NULL;
 	tmp = p;
-	while ((!option.r && p->file[i].name != 0) || (option.r && i >= 0))
+	current = p->file;
+	while (current)
 	{
-		if (S_ISDIR(p->file[i].pstat.st_mode) && can_open_folder(p->file[i].name))
+		if (S_ISDIR(current->pstat.st_mode) && can_open_folder(current->name))
 		{
 			new = NULL;
-			new = malloc_pfolder(p->file[i].path);
+			new = malloc_pfolder(current->path);
 			if (tmp == p)
 				rtr = new;
 			fill_subfolder(new, tmp, begin, option);
 			while (tmp->next)
 				tmp = tmp->next;
 		}
-		(option.r) ? i-- : i++;
+		current = current->next;
 	}
 	return (rtr);
 }
@@ -80,29 +80,27 @@ static int		dir_process(t_folder *pfolder, DIR *dirp,
 		t_option option)
 {
 	struct dirent	*dirc;
-	int				i;
+	t_file			*current;
 
 	if (nb_file(pfolder, option) == -1)
 		return (0);
-	if (!(pfolder->file = malloc(sizeof(t_file) * (pfolder->nb_file + 1))))
-		exit(-1);
-	i = 0;
+	current = pfolder->file;
 	while ((dirc = readdir(dirp)) != NULL)
 	{
 		if (dirc->d_name[0] != '.' || option.a)
 		{
-			memset_file(&pfolder->file[i]);
-			pfolder->file[i].name = ft_strdup(dirc->d_name);
-			set_stat(pfolder, &(pfolder->file[i++]));
+			if (!(current = memset_file(current)))
+				exit(-1);
+			if (!pfolder->file)
+				pfolder->file = current;
+			current->name = ft_strdup(dirc->d_name);
+			set_stat(pfolder, current);
 			if (option.l)
-				ell_option(pfolder, &pfolder->file[i - 1], option);
+				ell_option(pfolder, current, option);
 		}
 	}
-	pfolder->file[i].name = 0;
-	if (option.t)
-		sort_time(pfolder);
-	else if (!option.f)
-		sort_ascii(pfolder);
+	if (!option.f)
+		merge_sort_file(&(pfolder->file), option);
 	if (closedir(dirp) != 0)
 		pexit(pfolder->path);
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/14 15:57:01 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 14:39:38 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct			s_file
 	int				minor;
 	char			*date;
 	char			*path_link;
+	struct s_file	*next;
 }						t_file;
 
 typedef struct			s_folder
@@ -79,13 +80,16 @@ void					display_file(t_folder *pfolder, t_option option);
 t_folder				*select_dir(t_folder *pfolder,
 							const t_folder *begin, t_option option);
 void					set_stat(t_folder *pfolder, t_file *pfile);
-void					memset_file(t_file *pfile);
+t_file					*memset_file(t_file *pfile);
 void					memset_option(t_option *option);
 void					free_folder(t_folder *pfolder, t_option option);
 void					ell_option(t_folder *pfolder, t_file *pfile,
 							t_option option);
 int						can_open_folder(char *folder);
-void					merge_sort(t_folder **list, t_option option);
+void					merge_sort_folder(t_folder **list, t_option option);
+void					merge_sort_file(t_file **list, t_option option);
 int						test_lawaccess(char *path, char *file);
+int						*malloc_tab(size_t len);
+t_file					*get_lstfile(t_file *files, size_t index);
 
 #endif

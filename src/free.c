@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/08 15:34:32 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/08 15:42:23 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/15 14:50:07 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,32 @@
 
 void	free_file(t_file *pfile, t_option option)
 {
+	if (!pfile)
+		return ;
 	free(pfile->name);
-	free(pfile->path);
+	if (pfile->path)
+		free(pfile->path);
 	if (option.l)
 	{
 		free(pfile->mode);
 		free(pfile->owner);
 		free(pfile->group);
 		free(pfile->date);
+	}
+	free(pfile);
+}
+
+void	free_files(t_file *files, t_option option)
+{
+	t_file	*current;
+	t_file	*next;
+
+	current = files;
+	while (current)
+	{
+		next = current->next;
+		free_file(current, option);
+		current = next;
 	}
 }
 
@@ -37,10 +55,7 @@ void	free_folder(t_folder *pfolder, t_option option)
 		i = 0;
 		if (pfolder->file)
 		{
-			while (pfolder->file[i].name != 0)
-				free_file(&(pfolder->file[i++]), option);
-			free(pfolder->file[i].name);
-			free(pfolder->file);
+			free_files(pfolder->file, option);
 			pfolder->file = NULL;
 		}
 		free(pfolder->path);
