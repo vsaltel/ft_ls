@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 18:25:38 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 19:40:51 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,6 @@ static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
 			}
 		}
 		argv = argv + 1;
-		option->argc++;
 	}
 	return (begin);
 }

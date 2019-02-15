@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:15:31 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/15 16:49:16 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 19:40:50 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,42 +82,20 @@ void			merge_sort_folder(t_folder **list, t_option option)
 	*list = sort_merge(left, right, option);
 }
 
-void		sort_ascii(t_folder *pfolder)
+void			sort_ascii(char **tab)
 {
-	t_file	tmp;
+	char	*tmp;
 	int		i;
 
 	i = 0;
-	if (pfolder->file[i++].name != 0)
-		while (pfolder->file[i].name != 0)
+	if (tab[i++])
+		while (tab[i])
 		{
-			if (ft_strcmp(pfolder->file[i - 1].name, pfolder->file[i].name) > 0)
+			if (ft_strcmp(tab[i - 1], tab[i]) > 0)
 			{
-				tmp = pfolder->file[i - 1];
-				pfolder->file[i - 1] = pfolder->file[i];
-				pfolder->file[i] = tmp;
-				i = 1;
-			}
-			else
-				i++;
-		}
-}
-
-void		sort_time(t_folder *pfolder)
-{
-	t_file	tmp;
-	int		i;
-
-	i = 0;
-	if (pfolder->file[i++].name != 0)
-		while (pfolder->file[i].name != 0)
-		{
-			if (pfolder->file[i - 1].pstat.st_mtimespec.tv_sec <
-					pfolder->file[i].pstat.st_mtimespec.tv_sec)
-			{
-				tmp = pfolder->file[i - 1];
-				pfolder->file[i - 1] = pfolder->file[i];
-				pfolder->file[i] = tmp;
+				tmp = tab[i - 1];
+				tab[i - 1] = tab[i];
+				tab[i] = tmp;
 				i = 1;
 			}
 			else
