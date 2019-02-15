@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 16:28:26 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 18:22:52 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,8 @@ static int	*colonne(int *tab, t_folder *p, t_option option)
 	tab[0] = word_size + 1;
 	tab[1] = w.ws_col / tab[0];
 	tab[2] = p->nb_file / tab[1];
-	if (p->nb_file > tab[1] * tab[2])
-	{
+	if (p->nb_file % tab[1])
 		tab[2]++;
-		tab[1] = p->nb_file / tab[2] + 1;
-	}
 	return (tab);
 }
 
@@ -133,7 +130,7 @@ void		display(t_folder *p, t_option option, int isarg)
 	}
 	else
 		tab = colonne(tab, p, option);
-	if (!option.l && !option.un)
+	if ((!option.l && !option.un) || option.c)
 		display_col(p, tab, option, isarg);
 	else
 	{
@@ -147,10 +144,6 @@ void		display(t_folder *p, t_option option, int isarg)
 			current = current->next;
 		}
 	}
-	/*
-	if (!option.un && p->nb_file % tab[1] != 0)
-		ft_putchar('\n');
-		*/
 	free(tab);
 }
 

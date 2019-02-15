@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 16:24:45 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 18:25:38 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void			set_option(t_option *option, char *str)
 		{
 			option->un = 0;
 			option->l = 1;
+			option->c = 0;
 		}
 		else if (str[i] == 'R')
 			option->rec = 1;
@@ -60,6 +61,11 @@ void			set_option(t_option *option, char *str)
 			option->t = 1;
 		else if (str[i] == 'f')
 			option->f = 1;
+		else if (str[i] == 'C')
+		{
+			option->c = 1;
+			option->l = 0;
+		}
 		else
 		{
 			ft_printf("ft_ls: illegal option -- %c\n", str[i]);

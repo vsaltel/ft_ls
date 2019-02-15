@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 14:39:38 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 18:24:02 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct			s_option
 	int				t : 1;
 	int				f : 1;
 	int				un : 1;
+	int				c : 1;
 }						t_option;
 
 typedef struct			s_file

@@ -6,11 +6,17 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 16:28:13 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/15 17:17:42 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
+
+void	is_term(t_option *option)
+{
+	if (!isatty(1) && !option->c && !option->l)
+		option->un = 1;
+}
 
 void	fill_list(t_folder *pfolder, t_option option)
 {
@@ -54,6 +60,7 @@ int		main(int argc, char **argv)
 		option.t = 0;
 		option.r = 0;
 	}
+	is_term(&option);
 	if (pfolder->nb_file)
 		display_file(pfolder, option);
 	fill_list(pfolder, option);
