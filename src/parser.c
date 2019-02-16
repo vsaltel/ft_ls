@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 19:40:51 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/16 18:59:43 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,12 @@ void			set_option(t_option *option, char *str)
 			option->c = 1;
 			option->l = 0;
 		}
+		else if (str[i] == '@')
+			option->arob = 1;
 		else
 		{
 			ft_printf("ft_ls: illegal option -- %c\n", str[i]);
-			ft_printf("usage: ft_ls [-lRartf] [file ...]\n", str[i]);
+			write(2, "usage: ft_ls [-lRartf] [file ...]\n", 35);
 			exit(-1);
 		}
 	}

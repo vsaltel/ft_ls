@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/13 17:38:29 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/16 19:52:42 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,18 @@ static void	law_access(t_file *pfile, struct stat pstat)
 	pfile->mode[1] = ((pstat.st_mode & (S_IRUSR)) != 0) ? 'r' : '-';
 	pfile->mode[2] = ((pstat.st_mode & (S_IWUSR)) != 0) ? 'w' : '-';
 	pfile->mode[3] = ((pstat.st_mode & (S_IXUSR)) != 0) ? 'x' : '-';
+	if ((pstat.st_mode & (S_ISUID)))
+		pfile->mode[3] = pfile->mode[3] == 'x' ? 's' : 'S';
 	pfile->mode[4] = ((pstat.st_mode & (S_IRGRP)) != 0) ? 'r' : '-';
 	pfile->mode[5] = ((pstat.st_mode & (S_IWGRP)) != 0) ? 'w' : '-';
 	pfile->mode[6] = ((pstat.st_mode & (S_IXGRP)) != 0) ? 'x' : '-';
+	if ((pstat.st_mode & (S_ISGID)))
+		pfile->mode[6] = pfile->mode[6] == 'x' ? 's' : 'S';
 	pfile->mode[7] = ((pstat.st_mode & (S_IROTH)) != 0) ? 'r' : '-';
 	pfile->mode[8] = ((pstat.st_mode & (S_IWOTH)) != 0) ? 'w' : '-';
 	pfile->mode[9] = ((pstat.st_mode & (S_IXOTH)) != 0) ? 'x' : '-';
+	if ((pstat.st_mode & (S_ISVTX)))
+		pfile->mode[9] = pfile->mode[9] == 'x' ? 't' : 'T';
 }
 
 static void	fill_mode(t_file *pfile, struct stat pstat)
@@ -90,8 +96,10 @@ void		ell_option(t_folder *pfolder, t_file *pfile, t_option option)
 	fill_mode(pfile, pfile->pstat);
 	fill_other(pfile, pfile->pstat);
 	pfolder->total_blocks += pfile->pstat.st_blocks;
+	if (acl_get_file(pfile->path, ACL_TYPE_EXTENDED))
+			pfile->extand_perm = '+';
 	if (listxattr(pfile->path, NULL, 0, XATTR_NOFOLLOW) > 0)
-		pfile->extand_perm = '@';
+			pfile->extand_perm = '@';
 	if (pfile->mode[0] == 'l')
 	{
 		if (!(pfile->path_link = malloc(sizeof(char) * BUFF_SIZE)))

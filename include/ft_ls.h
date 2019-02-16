@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 19:40:53 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/16 16:51:44 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <sys/stat.h>
 # include <sys/xattr.h>
 # include <sys/ioctl.h>
+# include <sys/acl.h>
 # include <dirent.h>
 # include <uuid/uuid.h>
 # include <pwd.h>
@@ -36,6 +37,7 @@ typedef struct			s_option
 	int				t : 1;
 	int				f : 1;
 	int				un : 1;
+	int				arob : 1;
 	int				c : 1;
 }						t_option;
 
@@ -46,6 +48,7 @@ typedef struct			s_file
 	char			*name;
 	char			*mode;
 	char			extand_perm;
+	char			**extp_tab;
 	int				nlink;
 	char			*owner;
 	char			*group;
