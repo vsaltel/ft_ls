@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/16 20:05:29 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 11:19:47 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,14 +94,15 @@ static void	fill_mode(t_file *pfile, struct stat pstat)
 void		ell_option(t_folder *pfolder, t_file *pfile, t_option option)
 {
 	acl_t	tmp;
+
 	fill_mode(pfile, pfile->pstat);
 	fill_other(pfile, pfile->pstat);
 	pfolder->total_blocks += pfile->pstat.st_blocks;
 	if ((tmp = acl_get_file(pfile->path, ACL_TYPE_EXTENDED)))
-			pfile->extand_perm = '+';
+		pfile->extand_perm = '+';
 	acl_free(tmp);
 	if (listxattr(pfile->path, NULL, 0, XATTR_NOFOLLOW) > 0)
-			pfile->extand_perm = '@';
+		pfile->extand_perm = '@';
 	if (pfile->mode[0] == 'l')
 	{
 		if (!(pfile->path_link = malloc(sizeof(char) * BUFF_SIZE)))

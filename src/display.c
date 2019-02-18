@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 18:22:52 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/18 11:37:41 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ static int	*colonne(int *tab, t_folder *p, t_option option)
 	return (tab);
 }
 
-void		display_col(t_folder *p, int *tab, t_option option, int isarg)
+static void	display_col(t_folder *p, int *tab, t_option option, int isarg)
 {
-	int i;
-	int l;
-	int c;
+	int		i;
+	int		l;
+	int		c;
 	t_file	*file;
 
 	l = 0;
@@ -116,12 +116,10 @@ static void	big_print(t_file *file, int *tab, t_option option)
 
 void		display(t_folder *p, t_option option, int isarg)
 {
-	int		i;
 	int		*tab;
 	t_file	*current;
 
 	tab = NULL;
-	option.r ? (i = p->nb_file - 1) : (i = 0);
 	if (option.l)
 	{
 		if (p->file && !isarg)
@@ -137,28 +135,10 @@ void		display(t_folder *p, t_option option, int isarg)
 		current = p->file;
 		while (current)
 		{
-			if (option.l)
-				big_print(current, tab, option);
-			else if (option.un)
-					ft_printf("%s\n", current->name);
+			option.l ? big_print(current, tab, option) :
+				ft_printf("%s\n", current->name);
 			current = current->next;
 		}
 	}
 	free(tab);
-}
-
-void		display_file(t_folder *pfolder, t_option option)
-{
-	t_file	*current;
-
-	current = pfolder->file;
-	if (option.l)
-		while (current)
-		{
-			ell_option(pfolder, current, option);
-			current = current->next;
-		}
-	display(pfolder, option, 1);
-	if (pfolder->next)
-		ft_putchar('\n');
 }

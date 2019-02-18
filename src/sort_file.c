@@ -6,13 +6,13 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:15:31 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/15 16:47:51 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/18 11:17:44 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static size_t		lst_len(t_file *lst)
+static size_t	lst_len(t_file *lst)
 {
 	size_t	len;
 
@@ -43,7 +43,7 @@ static void		split_list(t_file **left, t_file **right, size_t lstlen)
 	(*right) = nlst;
 }
 
-static t_file		*sort_merge(t_file *left, t_file *right, t_option option)
+static t_file	*sort_merge(t_file *left, t_file *right, t_option option)
 {
 	t_file	*lst;
 	long	cmp;
@@ -72,7 +72,7 @@ static t_file		*sort_merge(t_file *left, t_file *right, t_option option)
 	return (lst);
 }
 
-void		merge_sort_file(t_file **list, t_option option)
+void			merge_sort_file(t_file **list, t_option option)
 {
 	size_t	lstlen;
 	t_file	*left;

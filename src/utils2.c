@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 15:32:09 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 12:43:56 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/18 11:18:59 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int		can_open_folder(char *folder)
 	return (1);
 }
 
-char			*str_withoutpath(char *str)
+char	*str_withoutpath(char *str)
 {
 	size_t	i;
 

@@ -6,19 +6,35 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 19:40:49 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 11:37:15 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-void	is_term(t_option *option)
+void		is_term(t_option *option)
 {
 	if (!isatty(1) && !option->c && !option->l)
 		option->un = 1;
 }
 
-void	fill_list(t_folder *pfolder, t_option option)
+static void	display_files(t_folder *pfolder, t_option option)
+{
+	t_file	*current;
+
+	current = pfolder->file;
+	if (option.l)
+		while (current)
+		{
+			ell_option(pfolder, current, option);
+			current = current->next;
+		}
+	display(pfolder, option, 1);
+	if (pfolder->next)
+		ft_putchar('\n');
+}
+
+static void	fill_list(t_folder *pfolder, t_option option)
 {
 	t_folder	*begin;
 	t_folder	*tmp;
@@ -40,7 +56,7 @@ void	fill_list(t_folder *pfolder, t_option option)
 	pfolder = begin;
 }
 
-int		main(int argc, char **argv)
+int			main(int argc, char **argv)
 {
 	t_option	option;
 	t_folder	*pfolder;
@@ -60,7 +76,7 @@ int		main(int argc, char **argv)
 	}
 	is_term(&option);
 	if (pfolder->nb_file)
-		display_file(pfolder, option);
+		display_files(pfolder, option);
 	fill_list(pfolder, option);
 	free_folder(pfolder, option);
 	return (0);

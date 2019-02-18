@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/16 18:59:43 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 12:33:55 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,48 +33,18 @@ t_folder		*malloc_pfolder(char *path)
 	return (pfolder);
 }
 
-void			set_option(t_option *option, char *str)
+static t_file	*fill_pfile(t_file *current, t_folder *begin, char **argv)
 {
-	int i;
-
-	i = 0;
-	while (str[++i])
-	{
-		if (str[i] == 'l')
-		{
-			option->un = 0;
-			option->l = 1;
-			option->c = 0;
-		}
-		else if (str[i] == 'R')
-			option->rec = 1;
-		else if (str[i] == '1')
-		{
-			option->un = 1;
-			option->l = 0;
-		}
-		else if (str[i] == 'a')
-			option->a = 1;
-		else if (str[i] == 'r')
-			option->r = 1;
-		else if (str[i] == 't')
-			option->t = 1;
-		else if (str[i] == 'f')
-			option->f = 1;
-		else if (str[i] == 'C')
-		{
-			option->c = 1;
-			option->l = 0;
-		}
-		else if (str[i] == '@')
-			option->arob = 1;
-		else
-		{
-			ft_printf("ft_ls: illegal option -- %c\n", str[i]);
-			write(2, "usage: ft_ls [-lRartf] [file ...]\n", 35);
-			exit(-1);
-		}
-	}
+	if (!(current = memset_file(current)))
+		exit(-1);
+	if (!begin->file)
+		begin->file = current;
+	current->name = ft_strdup(*argv);
+	current->path = NULL;
+	if (lstat(current->name, &(current->pstat)) == -1)
+		perror(current->name);
+	begin->nb_file++;
+	return (current);
 }
 
 static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
@@ -83,9 +53,7 @@ static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
 	int			rtr;
 	t_folder	*begin;
 	t_file		*current;
-	int			i;
 
-	i = 0;
 	pfolder = malloc_pfolder("file");
 	begin = pfolder;
 	current = begin->file;
@@ -100,17 +68,7 @@ static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
 				pfolder = pfolder->next;
 			}
 			else if (rtr == 2)
-			{
-				if (!(current = memset_file(current)))
-					exit(-1);
-				if (!begin->file)
-					begin->file = current;
-				current->name = ft_strdup(*argv);
-				current->path = NULL;
-				if (lstat(current->name, &(current->pstat)) == -1)
-					perror(current->name);
-				begin->nb_file++;
-			}
+				current = fill_pfile(current, begin, argv);
 		}
 		argv = argv + 1;
 	}

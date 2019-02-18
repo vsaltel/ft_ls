@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/16 16:51:44 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 12:02:03 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ typedef struct			s_folder
 }						t_folder;
 
 void					pexit(char *str);
+void					set_option(t_option *option, char *str);
 int						exists(t_file *pfile, char *file);
 t_folder				*malloc_pfolder(char *path);
 t_folder				*parse_options(t_folder *pfolder,
 						t_option *option, int argc, char **argv);
-void					fill_list(t_folder *pfolder, t_option option);
 void					test_folder(char **argv, int argc);
 char					*str_withoutpath(char *str);
 void					sort_ascii(char **tab);
