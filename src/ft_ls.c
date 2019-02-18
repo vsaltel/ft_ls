@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/04 13:20:58 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 19:40:50 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 17:51:11 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,6 @@ static int		nb_file(t_folder *pfolder, t_option option)
 		}
 	else
 		pexit(ft_strjoin("nb_file opendir ", pfolder->path));
-	if (ft_strcmp(pfolder->path, "/dev/fd") == 0 ||
-			ft_strcmp(pfolder->path, "/dev/fd/") == 0)
-		i--;
 	pfolder->nb_file = i;
 	if (closedir(dirp) != 0)
 		pexit(ft_strjoin("nb_file closedir ", pfolder->path));

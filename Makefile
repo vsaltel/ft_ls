@@ -6,7 +6,7 @@
 #    By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/02/16 20:05:40 by vsaltel          ###   ########.fr        #
+#    Updated: 2019/02/18 15:32:41 by frossiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,7 +29,8 @@ FILES 	=	ft_ls.c				\
 			sort_file.c			\
 			free.c				\
 			main.c				\
-			tab_utils.c
+			tab_utils.c			\
+			disp_utils.c
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS 	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 

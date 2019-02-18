@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/18 12:02:03 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 16:49:13 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ typedef struct			s_option
 	int				un : 1;
 	int				arob : 1;
 	int				c : 1;
+	int				s : 1;
+	int				g : 1;
 }						t_option;
 
 typedef struct			s_file
@@ -52,7 +54,7 @@ typedef struct			s_file
 	int				nlink;
 	char			*owner;
 	char			*group;
-	int				bytes;
+	long			bytes;
 	int				major;
 	int				minor;
 	char			*date;
@@ -94,5 +96,6 @@ void					merge_sort_file(t_file **list, t_option option);
 int						test_lawaccess(char *path, char *file);
 int						*malloc_tab(size_t len);
 t_file					*get_lstfile(t_file *files, size_t index);
+char					*get_file_color(t_file *file, t_option option);
 
 #endif

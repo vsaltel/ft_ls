@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:15:31 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/18 11:17:44 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 16:46:29 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,20 @@ static size_t	lst_len(t_file *lst)
 		lst = lst->next;
 	}
 	return (len);
+}
+
+static long		cmp_sort(t_file *left, t_file *right, t_option option)
+{
+	int		cmp;
+
+	cmp = 0;
+	if (option.s)
+		cmp = right->bytes - left->bytes;
+	else if (option.t)
+		cmp = right->pstat.st_mtime - left->pstat.st_mtime;
+	if (cmp == 0)
+		cmp = ft_strcmp(left->name, right->name);
+	return (cmp);
 }
 
 static void		split_list(t_file **left, t_file **right, size_t lstlen)
@@ -52,13 +66,7 @@ static t_file	*sort_merge(t_file *left, t_file *right, t_option option)
 		return (right);
 	else if (!right)
 		return (left);
-	if (option.t)
-	{
-		cmp = right->pstat.st_mtime - left->pstat.st_mtime;
-		cmp = cmp == 0 ? ft_strcmp(left->name, right->name) : cmp;
-	}
-	else
-		cmp = ft_strcmp(left->name, right->name);
+	cmp = cmp_sort(left, right, option);
 	if ((cmp < 0 && !option.r) || (cmp > 0 && option.r))
 	{
 		lst = left;

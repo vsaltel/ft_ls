@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/15 14:20:14 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/18 12:37:21 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/18 17:52:35 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,14 @@ void		set_option(t_option *option, char *str)
 				option->t = 1;
 			else if (str[i] == 'f')
 				option->f = 1;
+			else if (str[i] == 'S')
+				option->s = 1;
+			else if (str[i] == 'G')
+				option->g = 1;
 			else
 			{
 				write(2, "ft_ls: illegal option -- ", 25);
-				write(2, &str[i], 1);
+				write(2, str + i, 1);
 				write(2, "\nusage: ft_ls [-lRartf] [file ...]\n", 35);
 				exit(1);
 			}
