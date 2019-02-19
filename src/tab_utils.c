@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/15 14:20:14 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/18 17:52:35 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/19 18:02:39 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ t_file		*get_lstfile(t_file *files, size_t index)
 	while (index--)
 		files = files->next;
 	return (files);
+}
+
+int			disp_usage(char c)
+{
+	write(2, "ft_ls: illegal option -- ", 25);
+	write(2, &c, 1);
+	write(2, "\nusage: ft_ls [-CGRSaflrt1] [file ...]\n", 39);
+	return (1);
 }
 
 static int	set_option_next(t_option *option, char *str, int i)
@@ -84,11 +92,6 @@ void		set_option(t_option *option, char *str)
 			else if (str[i] == 'G')
 				option->g = 1;
 			else
-			{
-				write(2, "ft_ls: illegal option -- ", 25);
-				write(2, str + i, 1);
-				write(2, "\nusage: ft_ls [-lRartf] [file ...]\n", 35);
-				exit(1);
-			}
+				exit(disp_usage(str[i]));
 		}
 }

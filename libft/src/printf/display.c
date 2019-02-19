@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/04 15:45:31 by frossiny          #+#    #+#             */
-/*   Updated: 2019/01/21 17:35:46 by frossiny         ###   ########.fr       */
+/*   Created: 2019/02/19 17:28:10 by frossiny          #+#    #+#             */
+/*   Updated: 2019/02/19 18:25:32 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-size_t	write_buf(char buf[], int *i)
+static size_t	write_buf(char buf[], int *i)
 {
 	int c;
 
@@ -23,7 +23,7 @@ size_t	write_buf(char buf[], int *i)
 	return (c);
 }
 
-size_t	write_arg(char buf[], t_arg *arg, int start, size_t *count)
+static size_t	write_arg(char buf[], t_arg *arg, int start, size_t *count)
 {
 	size_t	str_len;
 
@@ -49,7 +49,7 @@ size_t	write_arg(char buf[], t_arg *arg, int start, size_t *count)
 	return (start);
 }
 
-size_t	write_end(char buf[], char *format, int j, size_t c)
+static size_t	write_end(char buf[], char *format, int j, size_t c)
 {
 	if (ft_strlen(buf) > 0)
 		c += write_buf(buf, &j);
@@ -57,7 +57,7 @@ size_t	write_end(char buf[], char *format, int j, size_t c)
 	return (c + ft_strlen(format));
 }
 
-size_t	write_all(char *format, t_arg *alst)
+size_t			write_all(char *format, t_arg *alst)
 {
 	char	buf[BUFF_SIZE + 1];
 	int		i;
@@ -84,22 +84,4 @@ size_t	write_all(char *format, t_arg *alst)
 	}
 	c += write_buf(buf, &j);
 	return (c);
-}
-
-int		ft_printf(char *format, ...)
-{
-	va_list	arg;
-	t_arg	*alst;
-	size_t	ret;
-
-	if (format == NULL)
-		return (-1);
-	va_start(arg, format);
-	parse_args(format, &alst, &arg);
-	if (alst == NULL)
-		return (write(1, format, ft_strlen(format)));
-	ret = write_all(format, alst);
-	va_end(arg);
-	del_list(&alst);
-	return (ret);
 }

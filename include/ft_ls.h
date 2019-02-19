@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/18 16:49:13 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/19 17:49:19 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct			s_option
 	int				c : 1;
 	int				s : 1;
 	int				g : 1;
+	int				h : 1;
 }						t_option;
 
 typedef struct			s_file
@@ -73,7 +74,7 @@ typedef struct			s_folder
 
 void					pexit(char *str);
 void					set_option(t_option *option, char *str);
-int						exists(t_file *pfile, char *file);
+int						exists(t_file *pfile, char *file, t_option options);
 t_folder				*malloc_pfolder(char *path);
 t_folder				*parse_options(t_folder *pfolder,
 						t_option *option, int argc, char **argv);

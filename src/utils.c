@@ -6,18 +6,19 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/15 17:57:08 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/19 17:06:50 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-int				exists(t_file *pfile, char *file)
+int				exists(t_file *pfile, char *file, t_option options)
 {
 	struct stat	pstat;
+	struct stat lstats;
 	char		*tmp;
 
-	if (!file || stat(file, &pstat) == -1)
+	if (!file || stat(file, &pstat) == -1 || lstat(file, &lstats) == -1)
 	{
 		tmp = ft_strjoin("ft_ls: ", file);
 		perror(tmp);
@@ -25,12 +26,15 @@ int				exists(t_file *pfile, char *file)
 		tmp = NULL;
 		return (0);
 	}
-	if (S_ISDIR(pstat.st_mode))
+	if ((S_ISDIR(pstat.st_mode) && !S_ISLNK(lstats.st_mode)) ||
+		(S_ISDIR(pstat.st_mode) && S_ISLNK(lstats.st_mode) && !options.l))
+	{
 		return (1);
+	}
 	else
 	{
 		if (pfile)
-			pfile->pstat = pstat;
+			pfile->pstat = S_ISLNK(lstats.st_mode) ? lstats : pstat;
 		return (2);
 	}
 }

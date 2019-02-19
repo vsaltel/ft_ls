@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/04 15:47:37 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/13 15:03:57 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/19 17:29:21 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct				s_arg
 }							t_arg;
 
 int							ft_printf(char *format, ...);
+size_t						write_all(char *format, t_arg *alst);
 void						parse_args(char *format, t_arg **alst,
 													va_list *args);
 void						parse_size(char *format, size_t i, t_arg *arg);

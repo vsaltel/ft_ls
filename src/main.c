@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:04:48 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/18 14:20:59 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/19 18:08:37 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ int			main(int argc, char **argv)
 	t_option	option;
 	t_folder	*pfolder;
 
-	sort_ascii(&(argv[1]));
-	pfolder = parse_options(pfolder, &option, argc, argv);
+	memset_option(&option);
+	pfolder = parse_options(pfolder, &option, argc, argv + 1);
 	if (!option.f)
 	{
 		merge_sort_file(&(pfolder->file), option);

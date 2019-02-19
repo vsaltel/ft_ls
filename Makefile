@@ -6,16 +6,16 @@
 #    By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/02/18 15:32:41 by frossiny         ###   ########.fr        #
+#    Updated: 2019/02/19 18:25:58 by frossiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		=	gcc
 #CFLAGS	+=	-Wall -Werror -Wextra
-CFLAGS = -g -fsanitize=address
+#CFLAGS = -g -fsanitize=address
 
 NAME 	=	ft_ls
-LIBFT	=	libftprintf
+LIBFT	=	libft
 SRCDIR	=	src
 INCDIR	=	include
 OBJDIR	=	objs
@@ -53,7 +53,7 @@ _WHITE=\x1b[37m
 $(NAME): $(OBJS)
 	@$(MAKE) -q -C $(LIBFT) || $(MAKE) -C $(LIBFT)
 	@echo "${_BLUE}${_BOLD}[Create Executable] $(NAME)${_END}"
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L./$(LIBFT) -lftprintf
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) -L./$(LIBFT) -lft
 	@echo "${_GREEN}${_BOLD}$(NAME) done.${_END}"
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
@@ -69,7 +69,7 @@ clean:
 	@rm -f $(OBJS)
 
 fclean: clean
-	#@make -C $(LIBFT) fclean
+	@make -C $(LIBFT) fclean
 	@echo "${_RED}${_BOLD}Cleaning project...${_END}"
 	@rm -f $(NAME)
 
