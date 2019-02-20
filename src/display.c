@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/05 14:08:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/18 17:06:13 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/20 11:32:26 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,8 @@ static void	display_col(t_folder *p, int *tab, t_option option, int isarg)
 			file = get_lstfile(p->file, i + l);
 			color = get_file_color(file, option);
 			if (file)
-				ft_printf("%s%s\033[0m%*s", color,
-					file->name, tab[0] - ft_strlen(file->name), " ");
+				ft_printf("%s%s%s%*s", color,
+					file->name, isatty(1) ? ("\033[0m") : (""), tab[0] - ft_strlen(file->name), " ");
 			i += tab[2];
 			c++;
 			free(color);

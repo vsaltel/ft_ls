@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 15:23:36 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/18 16:49:00 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/20 11:25:40 by vsaltel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ char	*get_file_color(t_file *file, t_option option)
 {
 	char	*str;
 
+	if (!isatty(1))
+		return (ft_strdup(""));
 	if (!option.g)
 		return (ft_strdup("\033[34;37m"));
 	if (S_ISBLK(file->pstat.st_mode))
