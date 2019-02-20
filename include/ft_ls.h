@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/19 17:49:19 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/20 17:47:18 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct			s_option
 	int				s : 1;
 	int				g : 1;
 	int				h : 1;
+	int				u : 1;
 }						t_option;
 
 typedef struct			s_file
@@ -83,6 +84,8 @@ char					*str_withoutpath(char *str);
 void					sort_ascii(char **tab);
 void					display(t_folder *pfolder, t_option option, int isarg);
 void					display_file(t_folder *pfolder, t_option option);
+void					print_col_file(t_file *file, t_option options,
+														int col_width, int last);
 t_folder				*select_dir(t_folder *pfolder,
 							const t_folder *begin, t_option option);
 void					set_stat(t_folder *pfolder, t_file *pfile);
@@ -98,5 +101,7 @@ int						test_lawaccess(char *path, char *file);
 int						*malloc_tab(size_t len);
 t_file					*get_lstfile(t_file *files, size_t index);
 char					*get_file_color(t_file *file, t_option option);
+time_t					get_ftime(struct stat stats, t_option option);
+char					*build_time(t_file *pfile, struct stat pstat, t_option option);
 
 #endif

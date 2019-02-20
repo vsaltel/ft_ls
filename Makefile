@@ -6,7 +6,7 @@
 #    By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/01/03 14:37:18 by vsaltel           #+#    #+#              #
-#    Updated: 2019/02/19 18:25:58 by frossiny         ###   ########.fr        #
+#    Updated: 2019/02/20 17:32:46 by frossiny         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ INCDIR	=	include
 OBJDIR	=	objs
 FILES 	=	ft_ls.c				\
 			parser.c			\
+			parser_flags.c		\
 			display.c			\
 			utils.c				\
 			utils2.c			\
@@ -30,7 +31,8 @@ FILES 	=	ft_ls.c				\
 			free.c				\
 			main.c				\
 			tab_utils.c			\
-			disp_utils.c
+			disp_utils.c		\
+			date_utils.c
 SRCS	=	$(addprefix $(SRCDIR)/, $(FILES))
 OBJS 	=	$(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 

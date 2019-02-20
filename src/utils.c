@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/19 17:06:50 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:13:10 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,29 @@
 int				exists(t_file *pfile, char *file, t_option options)
 {
 	struct stat	pstat;
-	struct stat lstats;
+	struct stat	lstats;
 	char		*tmp;
+	int			res;
+	int			res1;
 
-	if (!file || stat(file, &pstat) == -1 || lstat(file, &lstats) == -1)
+	res = stat(file, &pstat);
+	res1 = lstat(file, &lstats);
+	if (!file || (res == -1 && res1 == -1))
 	{
-		tmp = ft_strjoin("ft_ls: ", file);
+		if (file && file[0] == '\0')
+			tmp = ft_strdup("ft_ls: fts_open");
+		else
+			tmp = ft_strjoin("ft_ls: ", file);
 		perror(tmp);
 		free(tmp);
-		tmp = NULL;
-		return (0);
+		return ((file && file[0] == '\0') ? -1 : 0);
 	}
 	if ((S_ISDIR(pstat.st_mode) && !S_ISLNK(lstats.st_mode)) ||
 		(S_ISDIR(pstat.st_mode) && S_ISLNK(lstats.st_mode) && !options.l))
-	{
 		return (1);
-	}
-	else
-	{
-		if (pfile)
-			pfile->pstat = S_ISLNK(lstats.st_mode) ? lstats : pstat;
-		return (2);
-	}
+	if (pfile)
+		pfile->pstat = S_ISLNK(lstats.st_mode) ? lstats : pstat;
+	return (2);
 }
 
 static char		*str_pathfile(char *dst, const char *s1, const char *s2)

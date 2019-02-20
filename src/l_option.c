@@ -6,32 +6,40 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/24 18:09:50 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/19 17:02:40 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/20 17:14:44 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_ls.h"
 
-static void	fill_time(t_file *pfile, struct stat pstat)
+static void	fill_time(t_file *pfile, struct stat pstat, t_option option)
 {
 	char			*str;
+	time_t			ftime;
+	size_t			i;
 
-	str = ctime(&pstat.st_mtimespec.tv_sec);
-	if (time(NULL) - 15811200 < pstat.st_mtimespec.tv_sec)
-		pfile->date = ft_strdup(&str[4]);
-	else
+	ftime = get_ftime(pstat, option);
+	str = ctime(&ftime);
+	printf("Time: %s\n", str);
+	if (ftime + 15811200 < time(NULL) || ftime - 15811200 > time(NULL))
 	{
+		i = 19;
+		while (str[i] == ' ')
+			i++;
 		pfile->date = ft_strdup(&str[4]);
-		pfile->date[7] = str[19];
-		pfile->date[8] = str[20];
-		pfile->date[9] = str[21];
-		pfile->date[10] = str[22];
-		pfile->date[11] = str[23];
+		pfile->date[7] = ' ';
+		pfile->date[8] = str[i++];
+		pfile->date[9] = str[i++];
+		pfile->date[10] = str[i++];
+		pfile->date[11] = str[i++];
+		pfile->date[12] = str[i++];
 	}
+	else
+		pfile->date = ft_strdup(&str[4]);
 	pfile->date[12] = '\0';
 }
 
-static void	fill_other(t_file *pfile, struct stat pstat)
+static void	fill_other(t_file *pfile, struct stat pstat, t_option option)
 {
 	struct passwd	*pwd;
 	struct group	*grp;
@@ -48,7 +56,7 @@ static void	fill_other(t_file *pfile, struct stat pstat)
 	pfile->major = major(pstat.st_rdev);
 	pfile->minor = minor(pstat.st_rdev);
 	pfile->bytes = pstat.st_size;
-	fill_time(pfile, pstat);
+	pfile->date = build_time(pfile, pstat, option);
 }
 
 static void	law_access(t_file *pfile, struct stat pstat)
@@ -96,7 +104,7 @@ void		ell_option(t_folder *pfolder, t_file *pfile, t_option option)
 	acl_t	tmp;
 
 	fill_mode(pfile, pfile->pstat);
-	fill_other(pfile, pfile->pstat);
+	fill_other(pfile, pfile->pstat, option);
 	pfolder->total_blocks += pfile->pstat.st_blocks;
 	if ((tmp = acl_get_file(pfile->path, ACL_TYPE_EXTENDED)))
 		pfile->extand_perm = '+';

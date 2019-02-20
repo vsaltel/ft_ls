@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/18 15:23:36 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/20 11:25:40 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/20 14:59:10 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,4 +36,19 @@ char	*get_file_color(t_file *file, t_option option)
 		(file->pstat.st_mode & (S_IXGRP)) || (file->pstat.st_mode & (S_IXOTH)))
 		return (ft_strdup("\033[31m"));
 	return (ft_strdup("\033[37m"));
+}
+
+void	print_col_file(t_file *file, t_option options, int col_width, int last)
+{
+	char	*color;
+
+	if (!file)
+		return ;
+	color = get_file_color(file, options);
+	if (!last)
+		ft_printf("%s%s%s%*s", color, file->name, color[0] ? "\033[0m" : "",
+			col_width - ft_strlen(file->name), " ");
+	else
+		ft_printf("%s%s%s", color, file->name, color[0] ? "\033[0m" : "");
+	free(color);
 }

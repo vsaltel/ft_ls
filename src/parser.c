@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/19 18:14:33 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/20 17:46:47 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
 			}
 			else if (rtr == 2)
 				current = fill_pfile(current, begin, argv);
+			else if (rtr == -1)
+				exit(1);
 		}
 		argv = argv + 1;
 	}
@@ -82,9 +84,9 @@ t_folder		*parse_options(t_folder *pfolder, t_option *option,
 
 	while (--argc)
 	{
-		if ((*argv)[0] != '-')
+		if ((*argv)[0] != '-' || ((*argv)[0] == '-' && (*argv)[1] == '\0'))
 			break ;
-		if ((*argv)[0] == '-' && (*argv)[1] == '-')
+		if (ft_strlen(*argv) == 2 && (*argv)[0] == '-' && (*argv)[1] == '-')
 		{
 			argc--;
 			argv++;

@@ -6,7 +6,7 @@
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 14:15:31 by frossiny          #+#    #+#             */
-/*   Updated: 2019/02/18 16:46:29 by frossiny         ###   ########.fr       */
+/*   Updated: 2019/02/20 18:00:44 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,13 @@ static size_t	lst_len(t_file *lst)
 
 static long		cmp_sort(t_file *left, t_file *right, t_option option)
 {
-	int		cmp;
+	long	cmp;
 
 	cmp = 0;
 	if (option.s)
-		cmp = right->bytes - left->bytes;
+		cmp = right->pstat.st_size - left->pstat.st_size;
 	else if (option.t)
-		cmp = right->pstat.st_mtime - left->pstat.st_mtime;
+		cmp = get_ftime(right->pstat, option) - get_ftime(left->pstat, option);
 	if (cmp == 0)
 		cmp = ft_strcmp(left->name, right->name);
 	return (cmp);
