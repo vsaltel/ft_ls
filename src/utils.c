@@ -3,46 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/07 13:07:22 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/01 16:52:22 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/21 14:13:09 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
-void	pexit(char *str)
+int				exists(t_file *pfile, char *file, t_option options)
 {
-		perror(str);
-		exit(-1);
+	struct stat	pstat;
+	struct stat	lstats;
+	char		*tmp;
+	int			res;
+	int			res1;
+
+	res = stat(file, &pstat);
+	res1 = lstat(file, &lstats);
+	if (!file || (res == -1 && res1 == -1))
+	{
+		if (file && file[0] == '\0')
+			tmp = ft_strdup("ft_ls: fts_open");
+		else
+			tmp = ft_strjoin("ft_ls: ", file);
+		perror(tmp);
+		free(tmp);
+		return ((file && file[0] == '\0') ? -1 : 0);
+	}
+	if ((S_ISDIR(pstat.st_mode) && !S_ISLNK(lstats.st_mode)) ||
+		(S_ISDIR(pstat.st_mode) && S_ISLNK(lstats.st_mode) && !options.l))
+		return (1);
+	if (pfile)
+		pfile->pstat = S_ISLNK(lstats.st_mode) ? lstats : pstat;
+	return (2);
 }
 
-void	memset_option(t_option *option)
+static char		*str_pathfile(char *dst, const char *s1, const char *s2)
 {
-	option->l = 0;
-	option->R = 0;
-	option->a = 0;
-	option->r = 0;
-	option->t = 0;
-}
-
-void	memset_file(t_file *pfile)
-{
-	pfile->name = NULL;
-	pfile->mode = NULL;
-	pfile->extand_perm = ' ';
-	pfile->nlink = 0;
-	pfile->owner = NULL;
-	pfile->group = NULL;
-	pfile->bytes = 0;
-	pfile->date = NULL;
-	pfile->path_link = NULL;
-}
-
-char	*str_pathfile(char *dst, const char *s1, const char *s2)
-{
-	int i;
+	size_t i;
 
 	i = 0;
 	if (!s1 || !s2)
@@ -57,10 +57,10 @@ char	*str_pathfile(char *dst, const char *s1, const char *s2)
 	return (dst);
 }
 
-int		strl_pathfile(const char *s1, const char *s2)
+static size_t	strl_pathfile(const char *s1, const char *s2)
 {
-	int i;
-	int y;
+	size_t i;
+	size_t y;
 
 	i = 0;
 	y = 0;
@@ -76,37 +76,32 @@ int		strl_pathfile(const char *s1, const char *s2)
 	return (i + y);
 }
 
-void	free_folder(t_folder *pfolder, t_option option)
+int				test_lawaccess(char *path, char *file)
 {
-	t_folder *begin;
-	t_folder *tmp;
-	int i;
+	struct stat	pstat;
+	char		*buf;
+	int			rtr;
 
-	begin = pfolder;
-	while (pfolder)
-	{
-		i = 0;
-		if (pfolder->file)
-		{
-			while (pfolder->file[i].name != 0)
-			{
-				free(pfolder->file[i].name);
-				if (option.l)
-				{
-					free(pfolder->file[i].mode);
-					free(pfolder->file[i].date);
-				}
-				i++;
-			}
-			free(pfolder->file[i].name);
-			free(pfolder->file);
-			pfolder->file = NULL;
-		}
-		free(pfolder->path);
-		tmp = pfolder;
-		pfolder = pfolder->next;
-		free(tmp);
-		tmp = NULL;
-	}
-	pfolder = begin;
+	if (!(buf = malloc(sizeof(char) * strl_pathfile(path, file))))
+		exit(-1);
+	str_pathfile(buf, path, file);
+	rtr = stat(buf, &pstat);
+	free(buf);
+	if (rtr == -1)
+		return (0);
+	else
+		return (1);
+}
+
+void			set_stat(t_folder *pfolder, t_file *pfile)
+{
+	char		*buf;
+
+	if (!(buf = malloc(sizeof(char) *
+					strl_pathfile(pfolder->path, pfile->name))))
+		exit(-1);
+	if (lstat(str_pathfile(buf, pfolder->path, pfile->name),
+				&(pfile->pstat)) == -1)
+		perror(buf);
+	pfile->path = buf;
 }

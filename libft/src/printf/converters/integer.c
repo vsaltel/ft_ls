@@ -1,40 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstfold.c                                       :+:      :+:    :+:   */
+/*   integer.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/09 14:11:03 by frossiny          #+#    #+#             */
-/*   Updated: 2018/11/16 11:27:45 by frossiny         ###   ########.fr       */
+/*   Created: 2018/12/04 17:06:45 by frossiny          #+#    #+#             */
+/*   Updated: 2018/12/19 11:51:02 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include <stdio.h>
+#include "ft_printf.h"
 
-void	ft_lstfold(t_list **lst, void (*del)(void *, size_t))
+int		ft_atoi_i(const char *str, size_t *i)
 {
-	t_list	*prev;
-	t_list	*current;
-	t_list	*next;
+	long	val;
 
-	if (!lst || !*lst)
-		return ;
-	prev = NULL;
-	current = *lst;
-	while (current)
+	val = 0;
+	while (ft_isspace(str[*i]))
+		(*i)++;
+	while (str[*i] >= '0' && str[*i] <= '9')
 	{
-		next = current->next;
-		if (!current->content)
-		{
-			ft_lstdelone(&current, del);
-			if (prev)
-				prev->next = next;
-			else
-				*lst = next;
-		}
-		prev = current;
-		current = next;
+		val = (val * 10) + str[*i] - '0';
+		if (val < 0)
+			return (0);
+		(*i)++;
 	}
+	return ((int)val);
 }

@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memset.c                                        :+:      :+:    :+:   */
+/*   converter.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/05 18:22:55 by frossiny          #+#    #+#             */
-/*   Updated: 2018/11/14 13:50:14 by frossiny         ###   ########.fr       */
+/*   Created: 2018/12/07 14:33:18 by frossiny          #+#    #+#             */
+/*   Updated: 2019/02/01 17:18:26 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
+#include "converter.h"
 
-void	*ft_memset(void *b, int c, size_t len)
+void	convert(t_arg *arg)
 {
-	if (len == 0)
-		return (b);
-	*(unsigned char *)b = (unsigned char)c;
-	ft_memset(b + 1, c, len - 1);
-	return (b);
+	int		i;
+
+	i = 0;
+	if (!is_type(arg->type))
+		return (handle_unknown(arg));
+	while (g_convlst[i].dtype)
+	{
+		if (ft_strchr(g_convlst[i].dtype, arg->type))
+		{
+			g_convlst[i].func(arg);
+			return ;
+		}
+		i++;
+	}
 }

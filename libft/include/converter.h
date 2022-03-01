@@ -1,25 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   converter.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/06 16:47:58 by frossiny          #+#    #+#             */
-/*   Updated: 2018/11/06 17:01:36 by frossiny         ###   ########.fr       */
+/*   Created: 2018/12/07 16:31:09 by frossiny          #+#    #+#             */
+/*   Updated: 2019/01/21 15:48:00 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef CONVERTER_H
+# define CONVERTER_H
 
-size_t	ft_strlen(const char *s)
+# include "ft_printf.h"
+
+typedef struct	s_converter
 {
-	int		len;
-	char	*str;
+	char		*dtype;
+	void		(*func)(t_arg *arg);
+}				t_conv;
 
-	len = 0;
-	str = (char *)s;
-	while (*str++ != '\0')
-		len++;
-	return (len);
-}
+t_conv			g_convlst[] =
+{
+	{"di", &itoa_signed},
+	{"bouxX", &itoa_unsigned},
+	{"fF", &handle_float},
+	{"cC", &handle_char},
+	{"s", &handle_str},
+	{"p", &handle_ptr},
+	{"%", &handle_modulo},
+	{NULL, NULL}
+};
+
+#endif

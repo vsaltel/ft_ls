@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vsaltel <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: frossiny <frossiny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/03 15:24:49 by vsaltel           #+#    #+#             */
-/*   Updated: 2019/02/04 17:18:57 by vsaltel          ###   ########.fr       */
+/*   Updated: 2019/02/21 14:12:23 by frossiny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/ft_ls.h"
+#include "ft_ls.h"
 
-t_folder	*malloc_pfolder(char *path)
+t_folder		*malloc_pfolder(char *path)
 {
 	t_folder	*pfolder;
 
@@ -33,59 +33,75 @@ t_folder	*malloc_pfolder(char *path)
 	return (pfolder);
 }
 
-void	set_option(t_option *option, char *str)
+static t_file	*fill_pfile(t_file *current, t_folder *begin, char **argv)
 {
-	int i;
-
-	i = 1;
-	while (str[i])
-	{
-		if (str[i] == 'l')
-			option->l = 1;
-		else if (str[i] == 'R')
-			option->R = 1;
-		else if (str[i] == 'a')
-			option->a = 1;
-		else if (str[i] == 'r')
-			option->r = 1;
-		else if (str[i] == 't')
-			option->t = 1;
-		else
-		{
-			printf("usage : ft_ls [-lRart] [file ...]\n");
-			exit(-1);
-		}
-		i++;
-	}
+	if (!(current = memset_file(current)))
+		exit(-1);
+	if (!begin->file)
+		begin->file = current;
+	current->name = ft_strdup(*argv);
+	current->path = ft_strdup(*argv);
+	if (lstat(current->name, &(current->pstat)) == -1)
+		perror(current->name);
+	begin->nb_file++;
+	return (current);
 }
 
-t_folder	*parse_options(t_folder *pfolder, t_option *option, int argc, char **argv)
+static t_folder	*fill_pfolder(t_folder *pfolder, t_option *option,
+		int argc, char **argv)
+{
+	int			rtr;
+	t_folder	*begin;
+	t_file		*current;
+
+	pfolder = malloc_pfolder("file");
+	begin = pfolder;
+	current = begin->file;
+	begin->nb_file = 0;
+	while (argc-- > 0)
+	{
+		if ((rtr = exists(NULL, *argv, *option)))
+		{
+			if (rtr == 1)
+			{
+				pfolder->next = malloc_pfolder(*argv);
+				pfolder = pfolder->next;
+			}
+			else if (rtr == 2)
+				current = fill_pfile(current, begin, argv);
+			else if (rtr == -1)
+				exit(1);
+		}
+		argv = argv + 1;
+	}
+	return (begin);
+}
+
+t_folder		*parse_options(t_folder *pfolder, t_option *option,
+		int argc, char **argv)
 {
 	t_folder *begin;
 
-	memset_option(option);
-	argv++;
-	while (argc-- > 1)
+	while (--argc)
 	{
-		if (*argv[0] != '-')
+		if ((*argv)[0] != '-' || ((*argv)[0] == '-' && (*argv)[1] == '\0'))
 			break ;
+		if (ft_strlen(*argv) == 2 && (*argv)[0] == '-' && (*argv)[1] == '-')
+		{
+			argc--;
+			argv++;
+			break ;
+		}
 		set_option(option, *argv);
 		argv++;
 	}
+	sort_ascii(argv);
+	option->argc = argc;
 	if (argc > 0)
-	{
-		pfolder = malloc_pfolder(*argv++);
-		begin = pfolder;
-		while (--argc > 0)
-		{
-			pfolder->next = malloc_pfolder(*argv++);
-			pfolder = pfolder->next;
-		}
-	}
-	else
-	{
-		pfolder = malloc_pfolder(NULL);
-		begin = pfolder;
-	}
+		return (fill_pfolder(pfolder, option, argc, argv));
+	pfolder = malloc_pfolder("file");
+	begin = pfolder;
+	pfolder->next = malloc_pfolder(NULL);
+	begin->nb_file = 0;
 	return (begin);
 }
